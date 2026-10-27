@@ -52,10 +52,10 @@ public:
         gp << "set terminal windows\n";
 
         gp << "set mouse\n";
+       
+        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
-        gp << "set xlabel \"" << x_axis_label << "\"\n";
-
-        gp << "set ylabel \"" << y_axis_label << "\"\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
         gp << "set title \"" << title << "\"\n";
 
@@ -103,9 +103,9 @@ public:
 
         gp << "set mouse\n";
 
-        gp << "set xlabel \"" << x_axis_label << "\"\n";
+        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
-        gp << "set ylabel \"" << y_axis_label << "\"\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
         gp << "set title \"" << title << "\"\n";
 
@@ -150,8 +150,15 @@ public:
     template <typename T>
     void gnu_plot_builder(std::ofstream& gp, const std::vector<std::vector<T>>& x_data)
     {
+        gp << "set object 1 rectangle from graph 0,0 to graph 1,1 behind fc rgb '" << background_colour << "' fs solid 0.5\n";
+
+        gp << "set tics font '," << axis_tic_fontsize << "'\n";
+
+        gp << "set border " << border << " lw " << border_thickness << "\n";
+
         if (legend == true)
         {
+            gp << "set key font '," << legend_fontsize << "'\n";
 
             gp << "plot";
 
