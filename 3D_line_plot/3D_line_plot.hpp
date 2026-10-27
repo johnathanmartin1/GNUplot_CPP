@@ -60,9 +60,11 @@ public:
 
         gp << "set mouse\n";
 
-        gp << "set xlabel \"" << x_axis_label << "\"\n";
+        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
-        gp << "set ylabel \"" << y_axis_label << "\"\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
+
+        gp << "set zlabel '" << z_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
         gp << "set title \"" << title << "\"\n";
 
@@ -112,15 +114,17 @@ public:
 
         gp << "set mouse\n";
 
-        gp << "set xlabel \"" << x_axis_label << "\"\n";
+        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
-        gp << "set ylabel \"" << y_axis_label << "\"\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
+
+        gp << "set zlabel '" << z_axis_label << "' font '," << axis_label_fontsize << "'\n";
 
         gp << "set title \"" << title << "\"\n";
 
         if (grid == true)
         {
-            gp << "set grid\n";
+            gp << "set grid xtics ytics ztics\n";
         }
 
         gp << "set xrange " << range_min_max(x_range_min, x_range_max) << "\n";
@@ -154,9 +158,17 @@ protected:
     template <typename T>
     void gnu_plot_builder_3D(std::ofstream& gp, const std::vector<std::vector<T>>& x_data)
     {
+        gp << "set xyplane 0\n";
+
+        gp << "set wall x0 fillstyle solid 0.5 fc rgb '" << background_colour << "'\nset wall y1 fillstyle solid 0.5 fc rgb '" << background_colour << "'\nset wall z0 fillstyle solid 0.5 fc rgb '" << background_colour << "'\n";
+
+        gp << "set tics font '," << axis_tic_fontsize << "'\n";
+        
+        gp << "set border " << border << " lw " << border_thickness << "\n";
 
         if (legend == true)
         {
+            gp << "set key font '," << legend_fontsize << "'\n";
 
             gp << "splot";
 

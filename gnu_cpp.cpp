@@ -19,7 +19,7 @@ int main() {
     fig2.legend = 1;
     fig2.x_axis_label = "x axis";
     fig2.y_axis_label = "y axis";
-    fig2.grid = 1;
+    fig2.grid = 0;
     fig2.title = "practice plot";
     fig2.linewidth = 4;
     fig2.x_range_min = -5;
@@ -27,8 +27,8 @@ int main() {
     fig2.y_range_min = -6;
     fig2.y_range_max = 30;
     //fig2.save("C:/Users/johna/Desktop/fig2");
-    
-    //fig2.show();
+    fig2.legend_fontsize = 20;
+    fig2.show();
     //fig.show();
     //fig.linewidth = 8;
     //fig.save("C:/Users/johna/Desktop/fig1");
@@ -36,14 +36,17 @@ int main() {
 
     plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     fig3.grid = 1;
- /*   fig3.x_range_min = 2;
-    fig3.z_range_min = 50;
-    fig3.y_range_min = 12;
+ //  fig3.x_range_min = 2;
+    fig3.z_range_min = 0;
+    /*fig3.y_range_min = 12;
     fig3.x_range_max = 7;
     fig3.z_range_max = 70;
     fig3.y_range_max = 17;*/
     fig3.data_label = label_data("data1", "data2");
     fig3.legend = 1;
+    fig3.legend_fontsize = 20;
+    fig3.axis_label_fontsize = 20;
+    fig3.axis_tic_fontsize = 20;
     fig3.show();
     fig3.save("C:/Users/johna/Desktop/fig3");
 
