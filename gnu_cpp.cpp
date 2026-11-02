@@ -11,48 +11,30 @@ int main() {
 
  
     plot fig(x_data(data, data2, data), y_data(data3, data4, data5));
-    plot fig2(x_data(data, data), y_data(data4, data3));
-    
-    fig2.data_label = label_data("Data 1", "Data 2");
-    fig2.legend = 1;
-    fig2.x_axis_label = "x axis";
-    fig2.y_axis_label = "y axis";
-    fig2.grid = 0;
-    fig2.title = "practice plot";
-    fig2.linewidth = 4;
-    fig2.x_range_min = -5;
-    fig2.x_range_max = 7;
-    fig2.y_range_min = -6;
-    fig2.y_range_max = 30;
-    //fig2.save("C:/Users/johna/Desktop/fig2");
-    fig2.legend_fontsize = 20;
-    //fig2.show();
-    std::cout << fig2;
-    //fig.show();
-    //fig.linewidth = 8;
-    //fig.save("C:/Users/johna/Desktop/fig1");
-   
-    //plot fig4(x_data(), y_data());
-    //fig = fig2;
+    fig.data_label = label_data("Data 1", "Data 2", "Data 3");
+
     fig.line_style = line_style(".", "solid");
-    fig.legend = 0;
-    //fig.line_type = line_type("points", "lines", "linespoints");
-    fig.line_type = line_type("points");
-    std::cout << fig;
+    fig.legend = 1;
+    fig.line_colour = line_colour("green");
+    fig.line_type = line_type("points", "line", "linespoints");
+    //fig.line_type = line_type("points", "points", "points");
+    fig.point_size = point_size(3);
+    fig.point_type = point_type(5, 6, 7);
     fig.show();
+    fig.save("test");
     std::cout << fig;
+
+
+
     plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     fig3.grid = 1;
-    //fig3.x_range_min = 2;
-    //fig3.z_range_min = 0;
-    //fig3.y_range_min = 12;
-    //fig3.x_range_max = 7;
-    //fig3.z_range_max = 70;
-    //fig3.y_range_max = 17;
     fig3.data_label = label_data("data1", "data2");
-    //fig3.line_style = line_style(".-", ".");
-    fig3.line_type = line_type("linespoints", "points");
+    fig3.line_style = line_style(".-", ".");
+    fig3.line_type = line_type("linespoints", "linespoints");
+    fig3.point_size = point_size( 3,5.5 );
+    fig3.point_type = point_type(5, 2);
     fig3.legend = 1;
+    fig3.line_colour = line_colour("red", "red");
     fig3.legend_fontsize = 20;
     fig3.axis_label_fontsize = 20;
     fig3.axis_tic_fontsize = 20;

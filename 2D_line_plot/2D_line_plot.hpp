@@ -10,6 +10,7 @@
 
 #include "Tools/plot_tooling.hpp"
 #include "Tools/plot_options.hpp"
+#include "Tools/options_tooling.hpp"
 
 
 
@@ -51,11 +52,6 @@ public:
     plot(const std::vector<std::vector<T>> x_dat, const std::vector<std::vector<T>> y_dat) : x_data{ x_dat }, y_data{ y_dat }
     {
         static_assert(std::is_arithmetic_v<T>, "plot function requires a numeric data type.");
-        for (std::size_t i = 0; i < x_data.size(); i++) 
-        {
-            line_style.push_back("solid");
-            line_type.push_back("lines");
-        }
     }
 
     ~plot() { std::cout << "plot deleted\n"; }
@@ -77,9 +73,17 @@ public:
     {
         data_size_check(x_data, y_data);
 
-        line_style_sizing(line_style, x_data);
+        list_sizing_to_data(line_style, x_data, "solid");
 
-        line_type_sizing(line_type, x_data);
+        list_sizing_to_data(line_type, x_data, "line");
+
+        list_sizing_to_data(point_size, x_data, 1);
+
+        list_sizing_to_data(data_label, x_data, " ");
+
+        list_sizing_to_data(point_type, x_data, 1);
+
+        list_sizing_to_data(line_colour, x_data, "");
 
         std::ofstream gp("plot.gp");
 
@@ -129,9 +133,17 @@ public:
     {
         data_size_check(x_data, y_data);
 
-        line_style_sizing(line_style, x_data);
+        list_sizing_to_data(line_style, x_data, "solid");
 
-        line_type_sizing(line_type, x_data);
+        list_sizing_to_data(line_type, x_data, "line");
+
+        list_sizing_to_data(point_size, x_data, 1);
+
+        list_sizing_to_data(data_label, x_data, " ");
+        
+        list_sizing_to_data(point_type, x_data, 1);
+
+        list_sizing_to_data(line_colour, x_data, "");
 
         std::ofstream gp("plot.gp");
 
@@ -204,13 +216,19 @@ public:
 
             for (std::size_t i = 0; i < x_data.size(); i++)
             {
-                data_label_sizing(data_label, x_data);
-
                 std::string style{};
                 if (line_style[i] == "solid") { style = "solid"; }
                 else { style = "\"" + line_style[i] + "\""; }
                 
-                gp << " '-' using 1:2 with " << line_type[i] << " dt " << style << " lw " << linewidth << " title '" << data_label[i] << "'";
+                std::string point_style{};
+                if (line_type[i] == "line") { point_style = ""; }
+                else { point_style = " ps " + std::to_string(point_size[i]) + " pt " + std::to_string(point_type[i]); }
+
+                std::string line_colouring{};
+                if (line_colour[i] == "") { line_colouring = ""; }
+                else { line_colouring = " lc \"" + line_colour[i] + "\""; }
+                
+                gp << " '-' using 1:2 with " << line_type[i] << " dt " << style << " lw " << linewidth << point_style << line_colouring << " title '" << data_label[i] << "'";
 
                 data_finishing(gp, i, x_data);
             }
@@ -227,7 +245,15 @@ public:
                 if (line_style[i] == "solid") { style = "solid"; }
                 else { style = "\"" + line_style[i] + "\""; }
 
-                gp << " '-' using 1:2 with " << line_type[i] << " dt " << style << " lw " << linewidth << " ";
+                std::string point_style{};
+                if (line_type[i] == "line") { point_style = ""; }
+                else { point_style = " ps " + std::to_string(point_size[i]) + " pt " + std::to_string(point_type[i]); }
+
+                std::string line_colouring{};
+                if (line_colour[i] == "") { line_colouring = ""; }
+                else { line_colouring = " lc \"" + line_colour[i] + "\""; }
+
+                gp << " '-' using 1:2 with " << line_type[i] << " dt " << style << " lw " << linewidth << point_style << line_colouring << " ";
 
                 data_finishing(gp, i, x_data);
             }

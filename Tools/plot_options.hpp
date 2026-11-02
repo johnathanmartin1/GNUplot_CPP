@@ -112,36 +112,30 @@ struct two_D_plot_options : public plot_options_general
     //Pass a vector for the different linestyles, or alternativly use the line_style function e.g for two lines fig.line_style =  line_style(1,2,...). 
     std::vector<std::string> line_style{};
 
+    //Sets the line colour
+    std::vector<std::string> line_colour{};
+
+    //Sets the point size
+    std::vector<double> point_size{ 1 };
+
+    //Sets the point type options are: no point = 0, "+" = 1, "X" = 2, star = 3, unfilled square = 4, filled square = 5, unfilled circle = 6, and filled circle = 7.
+    std::vector<int> point_type{};
+
     virtual void options_print(std::ostream& out) const
     {
         out << "int border = " << border << "\n"
             << "double linewidth = " << linewidth << "\n"
             << "std::vector<std::string> line_style = ";
-        for (std::size_t i = 0; i < line_style.size(); i++)
-        {
-            out << line_style[i];
-            if (i + 1 >= line_style.size())
-            {
-                out << "\n";
-            }
-            else
-            {
-                out << ", ";
-            }
-        }
+        list_finisher(out, line_style);
         out << "std::vector<std::string> line_type = ";
-        for (std::size_t i = 0; i < line_type.size(); i++)
-        {
-            out << line_type[i];
-            if (i + 1 >= line_type.size())
-            {
-                out << "\n";
-            }
-            else
-            {
-                out << ", ";
-            }
-        }
+        list_finisher(out, line_type);
+        out << "std::vector<std::string> line_colour = ";
+        list_finisher(out, line_style);
+        out << "std::vector<double> point_size = ";
+        list_finisher(out, point_size);
+        out << "std::vector<std::string>> point_type = ";
+        list_finisher(out, point_type);
+        
     }
 };
 
@@ -169,6 +163,15 @@ struct three_D_plot_options : public plot_options_general
     //e.g line_type("lines", "linespoints",...)
     std::vector<std::string> line_type{};
 
+    //Sets the line colour
+    std::vector<std::string> line_colour{};
+
+    //Sets the point size.
+    std::vector<double> point_size{ 1 };
+
+    //Sets the point type options are: no point = 0, "+" = 1, "X" = 2, star = 3, unfilled square = 4, filled square = 5, unfilled circle = 6, and filled circle = 7.
+    std::vector<int> point_type{};
+
     // Sets the border that you want,
     // sum up the relavent options to slect that combination:
     // 1 Bottom left front, 2 Bottom left back, 4 Bottom right front, 
@@ -177,38 +180,22 @@ struct three_D_plot_options : public plot_options_general
     // 512 Top right back, 1024	Top left front, 2048 Top right front.
     int border{895};
 
-    virtual void options_print(std::ostream& out) const
+    void options_print(std::ostream& out) const
     {
         out << "std::string z_axis_label = \"" << z_axis_label << "\"\n"
             << "double z_range_min = " << z_range_min << "\n"
             << "double z_range_max = " << z_range_max << "\n"
             << "double linewidth = " << linewidth << "\n"
             << "std::vector<std::string> line_style = ";
-        for (std::size_t i = 0; i < line_style.size(); i++)
-        {
-            out << line_style[i];
-            if (i + 1 >= line_style.size())
-            {
-                out << "\n";
-            }
-            else
-            {
-                out << ", ";
-            }
-        }
+        list_finisher(out, line_style);
         out << "std::vector<std::string> line_type = ";
-        for (std::size_t i = 0; i < line_type.size(); i++)
-        {
-            out << line_type[i];
-            if (i + 1 >= line_type.size())
-            {
-                out << "\n";
-            }
-            else
-            {
-                out << ", ";
-            }
-        }
+        list_finisher(out, line_type);
+        out << "std::vector<std::string> line_colour = ";
+        list_finisher(out, line_style);
+        out << "double point_size = ";
+        list_finisher(out, point_size);
+        out << "std::vector<std::string>> point_type = ";
+        list_finisher(out, point_type);
         out << "int border = " << border << "\n";
     }
 
