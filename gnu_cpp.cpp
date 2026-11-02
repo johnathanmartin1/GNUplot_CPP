@@ -13,7 +13,7 @@ int main() {
 
  
     //plot fig(x_data(data, data2, data), y_data(data3, data4, data5));
-    plot fig2(x_data(data), y_data(data4));
+    plot fig2(x_data(data, data), y_data(data4, data3));
     
     fig2.data_label = label_data("Data 1", "Data 2");
     fig2.legend = 1;
@@ -29,6 +29,7 @@ int main() {
     //fig2.save("C:/Users/johna/Desktop/fig2");
     fig2.legend_fontsize = 20;
     fig2.show();
+    std::cout << fig2;
     //fig.show();
     //fig.linewidth = 8;
     //fig.save("C:/Users/johna/Desktop/fig1");
@@ -36,12 +37,12 @@ int main() {
 
     plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     fig3.grid = 1;
- //  fig3.x_range_min = 2;
-    fig3.z_range_min = 0;
-    /*fig3.y_range_min = 12;
-    fig3.x_range_max = 7;
-    fig3.z_range_max = 70;
-    fig3.y_range_max = 17;*/
+    //fig3.x_range_min = 2;
+    //fig3.z_range_min = 0;
+    //fig3.y_range_min = 12;
+    //fig3.x_range_max = 7;
+    //fig3.z_range_max = 70;
+    //fig3.y_range_max = 17;
     fig3.data_label = label_data("data1", "data2");
     fig3.legend = 1;
     fig3.legend_fontsize = 20;
@@ -49,6 +50,7 @@ int main() {
     fig3.axis_tic_fontsize = 20;
     fig3.show();
     fig3.save("C:/Users/johna/Desktop/fig3");
+    std::cout << fig3;
 
     return 0;
 }
