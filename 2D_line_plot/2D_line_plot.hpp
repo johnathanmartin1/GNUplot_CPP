@@ -10,6 +10,7 @@
 
 #include "Tools/plot_tooling.hpp"
 #include "Tools/plot_options.hpp"
+#include "Tools/options_tooling.hpp"
 
 
 
@@ -70,6 +71,20 @@ public:
     // Displays the plot in an interactive window.
     void show()
     {
+        data_size_check(x_data, y_data);
+
+        list_sizing_to_data(line_style, x_data, "solid");
+
+        list_sizing_to_data(line_type, x_data, "line");
+
+        list_sizing_to_data(point_size, x_data, 1);
+
+        list_sizing_to_data(data_label, x_data, " ");
+
+        list_sizing_to_data(point_type, x_data, 1);
+
+        list_sizing_to_data(line_colour, x_data, "");
+
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -98,8 +113,6 @@ public:
 
         gp << "set yrange " << range_min_max(y_range_min, y_range_max) << "\n";
 
-        data_size_check(x_data, y_data);
-
         gnu_plot_builder(gp, x_data);
 
         gnu_data_builder(gp, x_data, y_data);
@@ -118,6 +131,20 @@ public:
     /// <param name="name">file location and name to be saved as, i.e "C:/users/documnets/my_plot", take note you must use foward slashes as reverse slash will not work</param>
     void save(std::string name)
     {
+        data_size_check(x_data, y_data);
+
+        list_sizing_to_data(line_style, x_data, "solid");
+
+        list_sizing_to_data(line_type, x_data, "line");
+
+        list_sizing_to_data(point_size, x_data, 1);
+
+        list_sizing_to_data(data_label, x_data, " ");
+        
+        list_sizing_to_data(point_type, x_data, 1);
+
+        list_sizing_to_data(line_colour, x_data, "");
+
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -147,8 +174,6 @@ public:
         gp << "set xrange " << range_min_max(x_range_min, x_range_max) << "\n";
 
         gp << "set yrange " << range_min_max(y_range_min, y_range_max) << "\n";
-
-        data_size_check(x_data, y_data);
 
         gnu_plot_builder(gp, x_data);
 
@@ -191,9 +216,19 @@ public:
 
             for (std::size_t i = 0; i < x_data.size(); i++)
             {
-                data_label_sizing(data_label, x_data);
+                std::string style{};
+                if (line_style[i] == "solid") { style = "solid"; }
+                else { style = "\"" + line_style[i] + "\""; }
+                
+                std::string point_style{};
+                if (line_type[i] == "line") { point_style = ""; }
+                else { point_style = " ps " + std::to_string(point_size[i]) + " pt " + std::to_string(point_type[i]); }
 
-                gp << " '-' using 1:2 with lines lw " << linewidth << " title '" << data_label[i] << "'";
+                std::string line_colouring{};
+                if (line_colour[i] == "") { line_colouring = ""; }
+                else { line_colouring = " lc \"" + line_colour[i] + "\""; }
+                
+                gp << " '-' using 1:2 with " << line_type[i] << " dt " << style << " lw " << linewidth << point_style << line_colouring << " title '" << data_label[i] << "'";
 
                 data_finishing(gp, i, x_data);
             }
@@ -206,7 +241,19 @@ public:
 
             for (std::size_t i = 0; i < x_data.size(); i++)
             {
-                gp << " '-' using 1:2 with lines lw " << linewidth << " ";
+                std::string style{};
+                if (line_style[i] == "solid") { style = "solid"; }
+                else { style = "\"" + line_style[i] + "\""; }
+
+                std::string point_style{};
+                if (line_type[i] == "line") { point_style = ""; }
+                else { point_style = " ps " + std::to_string(point_size[i]) + " pt " + std::to_string(point_type[i]); }
+
+                std::string line_colouring{};
+                if (line_colour[i] == "") { line_colouring = ""; }
+                else { line_colouring = " lc \"" + line_colour[i] + "\""; }
+
+                gp << " '-' using 1:2 with " << line_type[i] << " dt " << style << " lw " << linewidth << point_style << line_colouring << " ";
 
                 data_finishing(gp, i, x_data);
             }

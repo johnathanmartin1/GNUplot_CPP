@@ -3,84 +3,8 @@
 
 #include <vector>
 #include <string>
+#include <type_traits>
 
-
-
-
-//stand alone functions for user arguments
-
-/// <summary>
-/// A function for packing the x data for plotting functions.
-/// </summary>
-/// <typeparam name="...ARGS"></typeparam>
-/// <param name="...args">Input vectors for the x data that will be packaged for plotting.</param>
-/// <returns>A single vector containing vectors of the x data.</returns>
-template <typename ...ARGS>
-std::vector<std::vector<double>> x_data(ARGS& ...args) 
-{    
-    std::vector<std::vector<double>> x_dat;
-
-    (x_dat.push_back(args), ...);
-
-    return x_dat;
-}
-
-
-
-
-/// <summary>
-/// A function for packing the y data for plotting functions.
-/// </summary>
-/// <typeparam name="...ARGS"></typeparam>
-/// <param name="...args">Input vectors for the y data that will be packaged for plotting.</param>
-/// <returns>A single vector containing vectors of the y data.</returns>
-template < typename ...ARGS>
-std::vector<std::vector<double>> y_data(ARGS& ...args) 
-{
-    std::vector<std::vector<double>> y_dat;
-
-    (y_dat.push_back(args), ...);
-
-    return y_dat;
-}
-
-
-
-
-/// <summary>
-/// A function for packing the z data for plotting functions.
-/// </summary>
-/// <typeparam name="...ARGS"></typeparam>
-/// <param name="...args">Input vectors for the z data that will be packaged for plotting.</param>
-/// <returns>A single vector containing vectors of the z data.</returns>
-template < typename ...ARGS>
-std::vector<std::vector<double>> z_data(ARGS& ...args)
-{
-    std::vector<std::vector<double>> z_dat;
-    
-    (z_dat.push_back(args), ...);
-
-    return z_dat;    
-}
-
-    
-
-    
-/// <summary>
-/// A packing function for the data labels.
-/// </summary>
-/// <typeparam name="...ARGS"></typeparam>
-/// <param name="...args">Input strings seperated by commas.</param>
-/// <returns>A vector containing labels of the plotted data.</returns>
-template <typename ...ARGS>
-std::vector<std::string> label_data(ARGS& ...args) {
-
-    std::vector<std::string> labels;
-    
-    (labels.push_back(args), ...);
-
-    return labels;    
-}
 
 
 //___________________________________________________________________________________________________________________________________________________________________________
@@ -286,6 +210,31 @@ protected:
             gp << "\n";
         }
     }
+
+   
+    template <typename U, typename T>
+    void list_sizing_to_data(std::vector<U>& list, const std::vector<std::vector<T>>& x_data, const std::type_identity_t<U>&& default_value)
+    {
+        std::size_t list_size = list.size();
+        if (list_size < x_data.size())
+        {
+            for (std::size_t i = 0; i < x_data.size() - list_size; i++)
+            {
+                list.push_back(default_value);
+            }
+        }
+
+        if (list_size > x_data.size())
+        {
+            for (std::size_t i = 0; i < list_size - x_data.size(); i++)
+            {
+                list.pop_back();
+            }
+        }
+    }
+
+
+
 };
 
 

@@ -10,6 +10,7 @@
 
 #include "Tools/plot_tooling.hpp"
 #include "Tools/plot_options.hpp"
+#include "Tools/options_tooling.hpp"
 
 
 /// _________________________________________________________________________________________
@@ -69,6 +70,16 @@ public:
     {
         if (data_size_check_3D(x_data, y_data, z_data)) { return; };
 
+        list_sizing_to_data(line_style, x_data, "solid");
+
+        list_sizing_to_data(line_type, x_data, "line");
+
+        list_sizing_to_data(point_size, x_data, 1);
+
+        list_sizing_to_data(data_label, x_data, " ");
+
+        list_sizing_to_data(point_type, x_data, 1);
+
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -120,6 +131,16 @@ public:
     void save(std::string name)
     {
         if (data_size_check_3D(x_data, y_data, z_data)) { return; };
+
+        list_sizing_to_data(line_style, x_data, "solid");
+
+        list_sizing_to_data(line_type, x_data, "line");
+
+        list_sizing_to_data(point_size, x_data, 1);
+
+        list_sizing_to_data(data_label, x_data, " ");
+
+        list_sizing_to_data(point_type, x_data, 1);
 
         std::ofstream gp("plot.gp");
 
@@ -183,7 +204,7 @@ protected:
     {
         gp << "set xyplane 0\n";
 
-        gp << "set wall x0 fillstyle solid 0.5 fc rgb '" << background_colour << "'\nset wall y1 fillstyle solid 0.5 fc rgb '" << background_colour << "'\nset wall z0 fillstyle solid 0.5 fc rgb '" << background_colour << "'\n";
+        gp << "set wall x0 fillstyle transparent fc rgb '" << background_colour << "'\nset wall y1 fillstyle transparent fc rgb '" << background_colour << "'\nset wall z0 fillstyle transparent fc rgb '" << background_colour << "'\n";
 
         gp << "set tics font '," << axis_tic_fontsize << "'\n";
         
@@ -197,9 +218,19 @@ protected:
 
             for (std::size_t i = 0; i < x_data.size(); i++)
             {
-                data_label_sizing(data_label, x_data);
+                std::string style{};
+                if (line_style[i] == "solid") { style = "solid"; }
+                else { style = "\"" + line_style[i] + "\""; }
 
-                gp << " '-' using 1:2:3 with lines lw " << linewidth << " title '" << data_label[i] << "'";
+                std::string point_style{};
+                if (line_type[i] == "line") { point_style = ""; }
+                else { point_style = " ps " + std::to_string(point_size[i]) + " pt " + std::to_string(point_type[i]); }
+
+                std::string line_colouring{};
+                if (line_colour[i] == "") { line_colouring = ""; }
+                else { line_colouring = " lc \"" + line_colour[i] + "\""; }
+
+                gp << " '-' using 1:2:3 with " << line_type[i] << " dt " << style << " lw " << linewidth << point_style << line_colouring <<" title '" << data_label[i] << "' ";
 
                 data_finishing(gp, i, x_data);
             }
@@ -212,7 +243,19 @@ protected:
 
             for (std::size_t i = 0; i < x_data.size(); i++)
             {
-                gp << " '-' using 1:2:3 with lines lw " << linewidth;
+                std::string style{};
+                if (line_style[i] == "solid") { style = "solid"; }
+                else { style = "\"" + line_style[i] + "\""; }
+
+                std::string point_style{};
+                if (line_type[i] == "line") { point_style = ""; }
+                else { point_style = " ps " + std::to_string(point_size[i]) + " pt " + std::to_string(point_type[i]); }
+
+                std::string line_colouring{};
+                if (line_colour[i] == "") { line_colouring = ""; }
+                else { line_colouring = " lc \"" + line_colour[i] + "\""; }
+
+                gp << " '-' using 1:2:3 with " << line_type[i] << " dt " << style << " lw " << linewidth << point_style << line_colouring << " ";
 
                 data_finishing(gp, i, x_data);
             }
@@ -230,4 +273,7 @@ protected:
         out << "\n\n";
     }
 };
+
+
+
 #endif
