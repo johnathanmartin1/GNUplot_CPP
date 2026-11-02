@@ -3,6 +3,7 @@
 
 #include <vector>
 #include <string>
+#include <map>
 
 
 
@@ -80,6 +81,26 @@ std::vector<std::string> label_data(ARGS& ...args) {
     (labels.push_back(args), ...);
 
     return labels;    
+}
+
+template <typename ...ARGS>
+std::vector<std::string> line_style(ARGS ...args)
+{
+    std::vector<std::string> line_styles;
+
+    (line_styles.push_back(args), ...);
+
+    return line_styles;
+}
+
+template <typename ...ARGS>
+std::vector<std::string> line_type(ARGS ...args)
+{
+    std::vector<std::string> line_types;
+
+    (line_types.push_back(args), ...);
+
+    return line_types;
 }
 
 
@@ -286,6 +307,9 @@ protected:
             gp << "\n";
         }
     }
+
+   
+    
 };
 
 

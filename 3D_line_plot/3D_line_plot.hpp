@@ -49,6 +49,12 @@ public:
     plot3D(const std::vector<std::vector<T>> x_dat, const std::vector<std::vector<T>> y_dat, const std::vector<std::vector<T>> z_dat) : x_data{ x_dat }, y_data{ y_dat }, z_data{z_dat}
     {
         static_assert(std::is_arithmetic_v<T>, "plot function requires a numeric data type.");
+
+        for (std::size_t i = 0; i < x_data.size(); i++)
+        {
+            line_style.push_back("solid");
+            line_type.push_back("lines");
+        }
     }
 
     ~plot3D() { std::cout << "plot deleted\n"; }
@@ -100,6 +106,10 @@ public:
         gp << "set yrange " << range_min_max(y_range_min, y_range_max) << "\n";
 
         gp << "set zrange " << range_min_max(z_range_min, z_range_max) << "\n";
+
+        line_style_sizing(line_style, x_data);
+
+        line_type_sizing(line_type, x_data);
 
         gnu_plot_builder_3D(gp, x_data);
 
@@ -155,6 +165,10 @@ public:
 
         gp << "set zrange " << range_min_max(z_range_min, z_range_max) << "\n";
 
+        line_style_sizing(line_style, x_data);
+
+        line_type_sizing(line_type, x_data);
+
         gnu_plot_builder_3D(gp, x_data);
 
         gnu_data_builder_3D(gp, x_data, y_data, z_data, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max);
@@ -199,7 +213,11 @@ protected:
             {
                 data_label_sizing(data_label, x_data);
 
-                gp << " '-' using 1:2:3 with lines lw " << linewidth << " title '" << data_label[i] << "'";
+                std::string style{};
+                if (line_style[i] == "solid") { style = "solid"; }
+                else { style = "\"" + line_style[i] + "\""; }
+
+                gp << " '-' using 1:2:3 with " << line_type[i] << " dt " << style << " lw " << linewidth << " title '" << data_label[i] << "'";
 
                 data_finishing(gp, i, x_data);
             }
@@ -212,7 +230,11 @@ protected:
 
             for (std::size_t i = 0; i < x_data.size(); i++)
             {
-                gp << " '-' using 1:2:3 with lines lw " << linewidth;
+                std::string style{};
+                if (line_style[i] == "solid") { style = "solid"; }
+                else { style = "\"" + line_style[i] + "\""; }
+
+                gp << " '-' using 1:2:3 with " << line_type[i] << " dt " << style << " lw " << linewidth;
 
                 data_finishing(gp, i, x_data);
             }

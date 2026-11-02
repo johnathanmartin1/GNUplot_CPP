@@ -33,9 +33,6 @@ public:
   
     // Sets the title of the plot, accepts strings.
     std::string title{};
-   
-    // Sets the width of the plotted lines default is 4, accepts decimals.
-    double linewidth{ 4 };
     
     // A boolian that turns the grid on or off, set as true or false, or 1 or 0.
     bool grid{ false };
@@ -67,21 +64,24 @@ public:
             << "bool legend = " << legend << "\n"
             << "double legend_fontsize = " << legend_fontsize << "\n"
             << "std::vector<std::string> data_label = {";
-           
-        for (std::size_t i = 0; i < data_label.size(); i++) 
-        {   
-            out << "\"" << data_label[i];
-            if (i + 1 == data_label.size()) 
-            { 
-                out << "\"}\n"; 
-            } 
-            else 
-            { 
-                out << "\", "; 
-            } 
-        };
+        if (data_label.size() == 0) { out << "}\n"; }
+        else
+        {
+
+            for (std::size_t i = 0; i < data_label.size(); i++)
+            {
+                out << "\"" << data_label[i];
+                if (i + 1 >= data_label.size())
+                {
+                    out << "\"}\n";
+                }
+                else
+                {
+                    out << "\", ";
+                }
+            };
+        }
         out << "std::string title = \"" << title << "\"\n"
-            << "double linewidth = " << linewidth << "\n"
             << "bool grid = " << grid << "\n"
             << "double x_range_min = " << x_range_min << "\n"
             << "double x_range_max = " << x_range_max << "\n"
@@ -101,9 +101,47 @@ struct two_D_plot_options : public plot_options_general
     // 1 Bottom, 2 Left, 4 Top, 8 Right.
     int border{ 15 };
 
+    // Sets the width of the plotted lines default is 4, accepts decimals.
+    double linewidth{ 4 };
+
+    //Sets the line type line="line", line with points = "linespoints", points = "points", can manually be placed in a vector or use the line_type function 
+    //e.g line_type("lines", "linespoints",...)
+    std::vector<std::string> line_type{};
+
+    //Sets the line style. solid line = "solid",  long dashed line = "_", dashed line = "-", dotted line = "." and combinations of each eg ". -"
+    //Pass a vector for the different linestyles, or alternativly use the line_style function e.g for two lines fig.line_style =  line_style(1,2,...). 
+    std::vector<std::string> line_style{};
+
     virtual void options_print(std::ostream& out) const
     {
-        out << "int border = " << border << "\n";
+        out << "int border = " << border << "\n"
+            << "double linewidth = " << linewidth << "\n"
+            << "std::vector<std::string> line_style = ";
+        for (std::size_t i = 0; i < line_style.size(); i++)
+        {
+            out << line_style[i];
+            if (i + 1 >= line_style.size())
+            {
+                out << "\n";
+            }
+            else
+            {
+                out << ", ";
+            }
+        }
+        out << "std::vector<std::string> line_type = ";
+        for (std::size_t i = 0; i < line_type.size(); i++)
+        {
+            out << line_type[i];
+            if (i + 1 >= line_type.size())
+            {
+                out << "\n";
+            }
+            else
+            {
+                out << ", ";
+            }
+        }
     }
 };
 
@@ -120,6 +158,17 @@ struct three_D_plot_options : public plot_options_general
     // Sets the maximum range of plot in the z axis.
     double z_range_max{ 1e308 };
 
+    // Sets the width of the plotted lines default is 4, accepts decimals.
+    double linewidth{ 4 };
+
+    //Sets the line style. solid line = "solid",  long dashed line = "_", dashed line = "-", dotted line = "." and combinations of each eg ". -"
+    //Pass a vector for the different linestyles, or alternativly use the line_style function e.g for two lines fig.line_style =  line_style(1,2,...). 
+    std::vector<std::string> line_style{};
+
+    //Sets the line type line="line", line with points = "linespoints", points = "points", can manually be placed in a vector or use the line_type function 
+    //e.g line_type("lines", "linespoints",...)
+    std::vector<std::string> line_type{};
+
     // Sets the border that you want,
     // sum up the relavent options to slect that combination:
     // 1 Bottom left front, 2 Bottom left back, 4 Bottom right front, 
@@ -133,8 +182,37 @@ struct three_D_plot_options : public plot_options_general
         out << "std::string z_axis_label = \"" << z_axis_label << "\"\n"
             << "double z_range_min = " << z_range_min << "\n"
             << "double z_range_max = " << z_range_max << "\n"
-            << "int border = " << border << "\n";
+            << "double linewidth = " << linewidth << "\n"
+            << "std::vector<std::string> line_style = ";
+        for (std::size_t i = 0; i < line_style.size(); i++)
+        {
+            out << line_style[i];
+            if (i + 1 >= line_style.size())
+            {
+                out << "\n";
+            }
+            else
+            {
+                out << ", ";
+            }
+        }
+        out << "std::vector<std::string> line_type = ";
+        for (std::size_t i = 0; i < line_type.size(); i++)
+        {
+            out << line_type[i];
+            if (i + 1 >= line_type.size())
+            {
+                out << "\n";
+            }
+            else
+            {
+                out << ", ";
+            }
+        }
+        out << "int border = " << border << "\n";
     }
+
+    
 };
 
 

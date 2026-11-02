@@ -26,14 +26,19 @@ int main() {
     fig2.y_range_max = 30;
     //fig2.save("C:/Users/johna/Desktop/fig2");
     fig2.legend_fontsize = 20;
-    fig2.show();
+    //fig2.show();
     std::cout << fig2;
     //fig.show();
     //fig.linewidth = 8;
     //fig.save("C:/Users/johna/Desktop/fig1");
    
     //plot fig4(x_data(), y_data());
-    fig = fig2;
+    //fig = fig2;
+    fig.line_style = line_style(".", "solid");
+    fig.legend = 0;
+    //fig.line_type = line_type("points", "lines", "linespoints");
+    fig.line_type = line_type("points");
+    std::cout << fig;
     fig.show();
     std::cout << fig;
     plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
@@ -45,6 +50,8 @@ int main() {
     //fig3.z_range_max = 70;
     //fig3.y_range_max = 17;
     fig3.data_label = label_data("data1", "data2");
+    //fig3.line_style = line_style(".-", ".");
+    fig3.line_type = line_type("linespoints", "points");
     fig3.legend = 1;
     fig3.legend_fontsize = 20;
     fig3.axis_label_fontsize = 20;
