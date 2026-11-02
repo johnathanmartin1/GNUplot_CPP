@@ -44,12 +44,23 @@ private:
 
 
 public:
+    //Constructors and destructor
+
     plot3D(const std::vector<std::vector<T>> x_dat, const std::vector<std::vector<T>> y_dat, const std::vector<std::vector<T>> z_dat) : x_data{ x_dat }, y_data{ y_dat }, z_data{z_dat}
     {
         static_assert(std::is_arithmetic_v<T>, "plot function requires a numeric data type.");
     }
 
     ~plot3D() { std::cout << "plot deleted\n"; }
+
+    plot3D(const plot3D& other) = default;
+
+    plot3D& operator = (const plot3D&) = default;
+
+    plot3D(plot3D&&) = default;
+
+    plot3D& operator = (plot3D&&) = default;
+
 
     /// <summary>
     /// Displays the plot in an interactive window.

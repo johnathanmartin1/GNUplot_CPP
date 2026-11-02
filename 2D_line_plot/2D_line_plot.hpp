@@ -46,6 +46,8 @@ private:
 
 
 public:
+    //Constructors and Destructor
+    
     plot(const std::vector<std::vector<T>> x_dat, const std::vector<std::vector<T>> y_dat) : x_data{ x_dat }, y_data{ y_dat }
     {
         static_assert(std::is_arithmetic_v<T>, "plot function requires a numeric data type.");
@@ -53,9 +55,19 @@ public:
 
     ~plot() { std::cout << "plot deleted\n"; }
 
-    /// <summary>
-    /// Displays the plot in an interactive window.
-    /// </summary>
+    plot(const plot& other) = default;
+
+    plot& operator = (const plot&) = default;
+
+    plot(plot&&) = default;
+
+    plot& operator = (plot&&) = default;
+
+
+
+
+    
+    // Displays the plot in an interactive window.
     void show()
     {
         std::ofstream gp("plot.gp");
