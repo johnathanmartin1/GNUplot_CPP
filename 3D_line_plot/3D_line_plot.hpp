@@ -22,6 +22,17 @@
 template <typename T>
 class plot3D : public three_D_plot_options, public plot_tools, public plot_builder_3D
 {
+
+//friend functions
+template <typename T>
+friend std::ostream& operator << (std::ostream& out, const plot3D<T>& plt)
+{
+    plt.options_print(out);
+
+    return out;
+}
+
+
 private:
     std::vector<std::vector<T>> x_data;
 
@@ -145,6 +156,7 @@ public:
     }
 
 
+   
 
 
 protected:
@@ -195,6 +207,16 @@ protected:
             }
 
         }
+    }
+
+    //Joins the options_print virtual functins from the 3Dplot options to print out all applicable
+   //options and current values for the plot class.
+    void options_print(std::ostream& out) const
+    {
+        out << "Plot Options and Current Values:\n\n";
+        plot_options_general::options_print(out);
+        three_D_plot_options::options_print(out);
+        out << "\n\n";
     }
 };
 #endif

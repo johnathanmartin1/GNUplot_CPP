@@ -12,6 +12,8 @@
 #include "Tools/plot_options.hpp"
 
 
+
+
 /// _________________________________________________________________________________________
 
 /// <summary>
@@ -22,10 +24,26 @@
 template <typename T>
 class plot : public two_D_plot_options, public plot_tools, public plot_builder_2D
 {
+
+//friend functions
+    template <typename T>
+    friend std::ostream& operator << (std::ostream& out, const plot<T>& plt)  
+    {      
+        plt.options_print(out);
+            
+        return out;   
+    }
+
+    
+
+
 private:
     std::vector<std::vector<T>> x_data;
 
     std::vector<std::vector<T>> y_data;
+
+
+
 
 public:
     plot(const std::vector<std::vector<T>> x_dat, const std::vector<std::vector<T>> y_dat) : x_data{ x_dat }, y_data{ y_dat }
@@ -134,9 +152,6 @@ public:
 
 
 
-
-
-
     protected:
 
 
@@ -187,7 +202,19 @@ public:
         }
     }
 
+    //Joins the options_print virtual functins from the plot options to print out all applicable
+    //options and current values for the plot class.
+    void options_print(std::ostream& out) const
+    {
+        out << "Plot Options and Current Values:\n\n";
+        plot_options_general::options_print(out);
+        two_D_plot_options::options_print(out);
+        out << "\n\n";
+    }
+
+
 };
+
 
 
 
