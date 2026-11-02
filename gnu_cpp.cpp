@@ -10,7 +10,7 @@ int main() {
     std::vector<double> data5{ 10,20,30,40,50,60,70,80,90,100 };
 
  
-    //plot fig(x_data(data, data2, data), y_data(data3, data4, data5));
+    plot fig(x_data(data, data2, data), y_data(data3, data4, data5));
     plot fig2(x_data(data, data), y_data(data4, data3));
     
     fig2.data_label = label_data("Data 1", "Data 2");
@@ -32,9 +32,10 @@ int main() {
     //fig.linewidth = 8;
     //fig.save("C:/Users/johna/Desktop/fig1");
    
-    plot fig4 = fig2;
-    fig4.show();
-    std::cout << fig4;
+    //plot fig4(x_data(), y_data());
+    fig = fig2;
+    fig.show();
+    std::cout << fig;
     plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     fig3.grid = 1;
     //fig3.x_range_min = 2;
@@ -49,7 +50,7 @@ int main() {
     fig3.axis_label_fontsize = 20;
     fig3.axis_tic_fontsize = 20;
     fig3.show();
-    fig3.save("C:/Users/johna/Desktop/fig3");
+    //fig3.save("C:/Users/johna/Desktop/fig3");
     std::cout << fig3;
 
     return 0;
