@@ -1,6 +1,4 @@
-#include "2D_line_plot/2D_line_plot.hpp"
-#include "3D_line_plot/3D_line_plot.hpp"
-
+#include "GNU_C++.hpp"
 
 
 int main() {
@@ -34,7 +32,9 @@ int main() {
     //fig.linewidth = 8;
     //fig.save("C:/Users/johna/Desktop/fig1");
    
-
+    plot fig4 = fig2;
+    fig4.show();
+    std::cout << fig4;
     plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     fig3.grid = 1;
     //fig3.x_range_min = 2;
