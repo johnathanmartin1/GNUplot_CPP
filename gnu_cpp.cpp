@@ -21,26 +21,41 @@ int main() {
     fig.point_size = point_size(3);
     fig.point_type = point_type(5, 6, 7);
     fig.show();
-    fig.save("test");
-    std::cout << fig;
+    //fig.save("test");
+    //std::cout << fig;
 
+    plot fig1(x_data(data5), y_data(data5));
+    fig1.data_label = label_data("fig1 data");
+    //fig1.line_colour = line_colour("green");
+    fig1.line_type = line_type("linespoints");
+    fig1.point_type = point_type(7);
+    
+    std::cout << fig.layered_figs.size()<<"\n";
+    fig.layer(fig1);
+    std::cout << fig.layered_figs.size()<<"\n";
+    fig.show();
 
-
-    plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
-    fig3.grid = 1;
-    fig3.data_label = label_data("data1", "data2");
-    fig3.line_style = line_style(".-", ".");
-    fig3.line_type = line_type("linespoints", "linespoints");
-    fig3.point_size = point_size( 3,5.5 );
-    fig3.point_type = point_type(5, 2);
-    fig3.legend = 1;
-    fig3.line_colour = line_colour("red", "red");
-    fig3.legend_fontsize = 20;
-    fig3.axis_label_fontsize = 20;
-    fig3.axis_tic_fontsize = 20;
+    plot fig3;
+    fig3.layer(fig, fig1);
+    fig3.legend = 0;
     fig3.show();
-    //fig3.save("C:/Users/johna/Desktop/fig3");
     std::cout << fig3;
+
+    //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
+    //fig3.grid = 1;
+    //fig3.data_label = label_data("data1", "data2");
+    //fig3.line_style = line_style(".-", ".");
+    //fig3.line_type = line_type("linespoints", "linespoints");
+    //fig3.point_size = point_size( 3,5.5 );
+    //fig3.point_type = point_type(5, 2);
+    //fig3.legend = 1;
+    //fig3.line_colour = line_colour("red", "red");
+    //fig3.legend_fontsize = 20;
+    //fig3.axis_label_fontsize = 20;
+    //fig3.axis_tic_fontsize = 20;
+    //fig3.show();
+    ////fig3.save("C:/Users/johna/Desktop/fig3");
+    //std::cout << fig3;
 
     return 0;
 }
