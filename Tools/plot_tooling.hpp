@@ -13,7 +13,7 @@
 
 struct plot_builder_2D
 {
-protected:
+public:
     /// <summary>
     /// Checks that the x and y data are the same size for each data set to be plotted.
     /// </summary>
@@ -171,7 +171,9 @@ protected:
 /// </summary>
 struct plot_tools
 {
-protected:
+
+
+public:
     /// <summary>
   /// Assigns the min and max of th ex and y axis if chosen if not it reverst back top teh gnu plot auto range utilising [*:*] for min man ranges.
   /// </summary>

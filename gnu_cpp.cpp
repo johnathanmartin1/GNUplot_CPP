@@ -25,10 +25,21 @@ int main() {
     //std::cout << fig;
 
     plot fig1(x_data(data5), y_data(data5));
+    fig1.data_label = label_data("fig1 data");
+    //fig1.line_colour = line_colour("green");
+    fig1.line_type = line_type("linespoints");
+    fig1.point_type = point_type(7);
     
+    std::cout << fig.layered_figs.size()<<"\n";
     fig.layer(fig1);
+    std::cout << fig.layered_figs.size()<<"\n";
     fig.show();
 
+    plot fig3;
+    fig3.layer(fig, fig1);
+    fig3.legend = 0;
+    fig3.show();
+    std::cout << fig3;
 
     //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     //fig3.grid = 1;
