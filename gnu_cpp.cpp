@@ -40,6 +40,7 @@ int main() {
     fig3.legend = 0;
     fig3.show();
     std::cout << fig3;
+    fig3.save("test");
 
     //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     //fig3.grid = 1;
