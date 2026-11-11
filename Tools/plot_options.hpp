@@ -25,9 +25,59 @@ public:
     // Boolian that turns the legened on or off, accepts boolean true or false, or 1 or 0.
     bool legend{ false };
 
+    //Sets the legend orientation. Inputs are "horizontal" or "vertical". Default is "vertical"
+    std::string legend_orientation{ "vertical" };
+
+    //Inverts the order of legend elements. Input = "invert". Default ="".
+    std::string legend_invert{};
+
+    //Sets the legend font. Default is "Arial"
+    std::string legend_font{ "Arial" };
+
     //Sets the legend font size
     double legend_fontsize{ 14 };
-   
+
+    //Sets the legend order as "line sample - text" or "text-line sample". For line sample-text input "reverse" and text - line sample input an empty string "". Default = "".
+    std::string legend_order{};
+
+    //Sets the line sample length. Input a double i.e 1.5., Default = 1.
+    double legend_sample_len{ 1 };
+
+    //Sets the vertical spacing between legend elements. Input a double i.e 2.5 Default=1.
+    double legend_spacing{ 1 };
+
+    //Sets the legend title. Default = "".
+    std::string legend_title{};
+
+    //SEts teh legend title font. Default = "Arial".
+    std::string legend_title_font{ "Arial" };
+
+    //Sets the legend tiotle font size. Default = 14.
+    double legend_title_fontsize{ 14 };
+
+    //Sets the legened region can be used in conjunction with legend_alignment option: 
+    // inside the plot boundary = inside,
+    // outside the plot boundary = outside,
+    // left margin = lmargin,
+    // right margin = rmargin,
+    // top margin = tmargin,
+    // bottom margin = bmargin.
+    std::string legend_region{"inside"};
+
+    //Sets the alignment of the legend within a selected region, if no region selected the default is inside. 
+    // X alignment options: "left", "center", "right". Y alignment options: "top", "center", "bottom".
+    // Choose X alignment then Y alignment i.e for left alignment, with gnu plot choosing the best y alignment the input strinf is "left" or for center x alignment and bottom y alignment the input string is "center bottom".
+    //Default is "top right".
+    std::string legend_alignment{"top right"};
+
+    //Sets the legend at chosen graph normalised coordinates "0, 0" being the bottom left corner and "1, 1" being th eupper right corner of the plot. Input example is the string "0.8, 0.9"
+    //This will take precedance over legend_region and legend_alignment position options. Default is an empty string "".
+    std::string legend_position{};
+
+    //Sets the legend at chosen x and y cooredinates of the diaspalayed axis, input example for a postionat x axis = 10 and y axis = 8 the input is the string "10, 8".
+    //This will take precedance over legend_region, legend_alignment and legend_position options. Default is an empty string "".
+    std::string legend_position_axis{};
+
     // Sets the data labels, use label_data("data1", "data2",... etc) function to assign data labels.
     std::vector<std::string> data_label{};
   
@@ -62,25 +112,22 @@ public:
             << "double axis_label_fontsize = " << axis_label_fontsize << "\n"
             << "double axis_tic_fontsize = " << axis_tic_fontsize << "\n"
             << "bool legend = " << legend << "\n"
+            << "std::string legend_font = \"" << legend_font << "\"\n"
             << "double legend_fontsize = " << legend_fontsize << "\n"
-            << "std::vector<std::string> data_label = {";
-        if (data_label.size() == 0) { out << "}\n"; }
-        else
-        {
-
-            for (std::size_t i = 0; i < data_label.size(); i++)
-            {
-                out << "\"" << data_label[i];
-                if (i + 1 >= data_label.size())
-                {
-                    out << "\"}\n";
-                }
-                else
-                {
-                    out << "\", ";
-                }
-            };
-        }
+            << "std::string legend_title = \"" << legend_title << "\"\n"
+            << "std::string legend_title_font = \"" << legend_title_font << "\"\n"
+            << "double legend_title_fontsize = " << legend_title_fontsize << "\n"
+            << "std::string legend_orientation = \"" << legend_orientation << "\"\n"
+            << "std::string legend_invert = \"" << legend_invert << "\"\n"
+            << "std::string legend_order = \"" << legend_order << "\"\n"
+            << "double legend_sample_len = " << legend_sample_len << "\n"
+            << "doubel legend_spacing = " << legend_spacing << "\n"
+            << "std::string legend_region = \"" << legend_region << "\"\n"
+            << "std::string legend_alignment = \"" << legend_alignment << "\"\n"
+            << "std::string legend position = \"" << legend << "\"\n"
+            << "std::string legend_position_axis = \"" << legend_position_axis << "\"\n"
+            << "std::vector<std::string> data_label = ";
+            list_finisher(out, data_label);
         out << "std::string title = \"" << title << "\"\n"
             << "bool grid = " << grid << "\n"
             << "double x_range_min = " << x_range_min << "\n"
