@@ -273,7 +273,8 @@ public:
 
         if (legend == true)
         {
-            gp << "set key font '," << legend_fontsize << "'\n";
+            //gp << "set key font '," << legend_fontsize << "'\n";
+            legend_builder(gp, legend_fontsize, legend_region, legend_alignment, legend_position, legend_position_axis);
 
             gp << "plot";
 

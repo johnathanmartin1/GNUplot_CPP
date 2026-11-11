@@ -20,7 +20,7 @@ int main() {
     //fig.line_type = line_type("points", "points", "points");
     fig.point_size = point_size(3);
     fig.point_type = point_type(5, 6, 7);
-    fig.show();
+    //fig.show();
     //fig.save("test");
     //std::cout << fig;
 
@@ -33,14 +33,21 @@ int main() {
     std::cout << fig.layered_figs.size()<<"\n";
     fig.layer(fig1);
     std::cout << fig.layered_figs.size()<<"\n";
-    fig.show();
+    //fig.show();
 
     plot fig3;
     fig3.layer(fig, fig1);
-    fig3.legend = 0;
+    fig3.legend = 1;
+    fig3.legend_region = "lmargin";
+    fig3.legend_region = "bmargin";
+    fig3.legend_region = "tmargin";
+    
+    fig3.legend_alignment = "center";
+    fig3.legend_position = "0.5, 0.5";
+    fig3.legend_position_axis = "10,10";
     fig3.show();
     std::cout << fig3;
-    fig3.save("test");
+    //fig3.save("test");
 
     //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     //fig3.grid = 1;

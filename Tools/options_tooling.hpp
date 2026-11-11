@@ -28,6 +28,25 @@ protected:
     }
 
 
+    //Creates the legend gnu plot string based on class defined plot option variables
+    void legend_builder(std::ofstream& gp, double legend_fontsize, const std::string& legend_region, const std::string& legend_alignment, const std::string& legend_position, const std::string& legend_position_axis) const
+    {
+        gp << "set key font '," << legend_fontsize << "' ";
+
+        if (!legend_position_axis.empty()) 
+        {
+            gp << "at " << legend_position_axis << "\n";
+        }
+        else if (!legend_position.empty())
+        {
+            gp << "at graph " << legend_position << "\n";
+        }
+        else
+        {
+            gp << legend_region << " " << legend_alignment << "\n";
+        }
+    }
+
 };
 
 

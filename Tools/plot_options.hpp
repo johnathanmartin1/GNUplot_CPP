@@ -27,7 +27,32 @@ public:
 
     //Sets the legend font size
     double legend_fontsize{ 14 };
-   
+
+    //Sets the legend display as sample text or text sample. For sample text input 
+
+    //Sets the legened region can be used in conjunction with legend_alignment option: 
+    // inside the plot boundary = inside,
+    // outside the plot boundary = outside,
+    // left margin = lmargin,
+    // right margin = rmargin,
+    // top margin = tmargin,
+    // bottom margin = bmargin.
+    std::string legend_region{"inside"};
+
+    //Sets the alignment of the legend within a selected region, if no region selected the default is inside. 
+    // X alignment options: "left", "center", "right". Y alignment options: "top", "center", "bottom".
+    // Choose X alignment then Y alignment i.e for left alignment, with gnu plot choosing the best y alignment the input strinf is "left" or for center x alignment and bottom y alignment the input string is "center bottom".
+    //Default is "top right".
+    std::string legend_alignment{"top right"};
+
+    //Sets the legend at chosen graph normalised coordinates "0, 0" being the bottom left corner and "1, 1" being th eupper right corner of the plot. Input example is the string "0.8, 0.9"
+    //This will take precedance over legend_region and legend_alignment position options. Default is an empty string "".
+    std::string legend_position{};
+
+    //Sets the legend at chosen x and y cooredinates of the diaspalayed axis, input example for a postionat x axis = 10 and y axis = 8 the input is the string "10, 8".
+    //This will take precedance over legend_region, legend_alignment and legend_position options. Default is an empty string "".
+    std::string legend_position_axis{};
+
     // Sets the data labels, use label_data("data1", "data2",... etc) function to assign data labels.
     std::vector<std::string> data_label{};
   
