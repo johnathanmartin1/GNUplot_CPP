@@ -274,7 +274,8 @@ public:
         if (legend == true)
         {
             //gp << "set key font '," << legend_fontsize << "'\n";
-            legend_builder(gp, legend_fontsize, legend_region, legend_alignment, legend_position, legend_position_axis);
+            legend_builder(gp, legend_font, legend_fontsize, legend_region, legend_alignment, legend_position, legend_position_axis,
+                legend_sample_len, legend_spacing, legend_order, legend_title, legend_title_font, legend_title_fontsize, legend_orientation, legend_invert);
 
             gp << "plot";
 

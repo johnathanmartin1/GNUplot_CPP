@@ -3,6 +3,7 @@
 
 
 
+
 struct options_tools
 {
 protected:
@@ -10,42 +11,59 @@ protected:
 
     // finshes of the list printing for option variables
     template <typename T>
-    void list_finisher(std::ostream& out, const std::vector<T> list) const
+    void list_finisher(std::ostream& out, const std::vector<T>& list) const
     {
         out << "{";
-        for (std::size_t i = 0; i < list.size(); i++)
+        if (list.empty())
         {
-            out << "\"" << list[i];
-            if (i + 1 >= list.size())
+            out << "}\n";
+        }
+        else
+        {
+            for (std::size_t i = 0; i < list.size(); i++)
             {
-                out << "\"}\n";
-            }
-            else
-            {
-                out << "\", ";
+                out << "\"" << list[i];
+                if (i + 1 >= list.size())
+                {
+                    out << "\"}\n";
+                }
+                else
+                {
+                    out << "\", ";
+                }
             }
         }
     }
 
 
     //Creates the legend gnu plot string based on class defined plot option variables
-    void legend_builder(std::ofstream& gp, double legend_fontsize, const std::string& legend_region, const std::string& legend_alignment, const std::string& legend_position, const std::string& legend_position_axis) const
+    void legend_builder(std::ofstream& gp, const std::string& legend_font, double legend_fontsize, const std::string& legend_region, const std::string& legend_alignment, const std::string& legend_position, const std::string& legend_position_axis,
+    const double& legend_sample_len, const double& legend_spacing, const std::string& legend_order, const std::string& legend_title, const std::string& legend_title_font, const double& legend_title_fontsize, const std::string& legend_orientation,
+        const std::string& legend_invert) const
     {
-        gp << "set key font '," << legend_fontsize << "' ";
+        gp << "set key font '"<< legend_font << ", " << legend_fontsize << "'\n";
+        gp << "set key spacing " << legend_spacing << "\n";
+        gp << "set key samplen " << legend_sample_len << "\n";
+        gp << "set key title '" << legend_title << "' font '" << legend_title_font << ", " << legend_title_fontsize << "'\n";
+        gp << "set key " << legend_order << "\n";
+        gp << "set key " << legend_orientation << "\n";
+        gp << "set key " << legend_order << "\n";
+        gp << "set key " << legend_invert << "\n";
 
         if (!legend_position_axis.empty()) 
         {
-            gp << "at " << legend_position_axis << "\n";
+            gp << "set key at " << legend_position_axis << "\n";
         }
         else if (!legend_position.empty())
         {
-            gp << "at graph " << legend_position << "\n";
+            gp << "set key at graph " << legend_position << "\n";
         }
         else
         {
-            gp << legend_region << " " << legend_alignment << "\n";
+            gp << "set key " << legend_region << " " << legend_alignment << "\n";
         }
     }
+    
 
 };
 

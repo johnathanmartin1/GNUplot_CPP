@@ -30,25 +30,31 @@ int main() {
     fig1.line_type = line_type("linespoints");
     fig1.point_type = point_type(7);
     
-    std::cout << fig.layered_figs.size()<<"\n";
+
     fig.layer(fig1);
-    std::cout << fig.layered_figs.size()<<"\n";
+    std::cout << fig;
     //fig.show();
 
     plot fig3;
     fig3.layer(fig, fig1);
     fig3.legend = 1;
-    fig3.legend_region = "lmargin";
-    fig3.legend_region = "bmargin";
-    fig3.legend_region = "tmargin";
-    
-    fig3.legend_alignment = "center";
-    fig3.legend_position = "0.5, 0.5";
-    fig3.legend_position_axis = "10,10";
+    //fig3.legend_region = "lmargin";
+  
+    fig3.legend_fontsize = 20;
+    fig3.legend_title_fontsize = 20;
+    fig3.legend_title_font = "DejaVu Sans";
+    fig3.legend_spacing = 2;
+    fig3.legend_sample_len = 10;
+    //fig3.legend_order = "reverse";
+    fig3.legend_title = "My Title";
+    fig3.legend_invert = "invert";
+    //fig3.legend_alignment = "center";
+    //fig3.legend_position = "0.5, 0.5";
+    fig3.legend_position_axis = "90,50";
     fig3.show();
     std::cout << fig3;
     //fig3.save("test");
-
+    
     //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     //fig3.grid = 1;
     //fig3.data_label = label_data("data1", "data2");
