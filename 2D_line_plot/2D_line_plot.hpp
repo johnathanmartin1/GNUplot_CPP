@@ -97,6 +97,9 @@ public:
 
         layer_plot_data_alignment(layered_figs);
 
+        tic_builder_2D("x", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max);
+        tic_builder_2D("y", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max);
+
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -151,6 +154,9 @@ public:
         plot_data_alignment();
 
         layer_plot_data_alignment(layered_figs);
+
+   /*     tic_builder("x", layered_figs, x_data, y_data, x_data, xtic_labels, ytic_labels, xtic_labels);
+        tic_builder("y", layered_figs, x_data, y_data, x_data, xtic_labels, ytic_labels, xtic_labels);*/
 
         std::ofstream gp("plot.gp");
 

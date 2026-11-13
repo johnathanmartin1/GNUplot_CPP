@@ -1,6 +1,9 @@
 #ifndef options_tooling
 #define options_tooling
 
+#include <algorithm>
+#include <cmath>
+#include <type_traits>
 
 
 
@@ -65,7 +68,12 @@ protected:
     }
     
 
+
+
 };
+
+
+
 
 
 
@@ -85,6 +93,44 @@ std::vector<std::vector<double>> x_data(ARGS& ...args)
     (x_dat.push_back(args), ...);
 
     return x_dat;
+}
+
+
+
+
+/// <summary>
+/// A function for packing the xtic labels for plotting functions.
+/// </summary>
+/// <typeparam name="...ARGS"></typeparam>
+/// <param name="...args">Input a comma seperated list of strings to match up to the xtics.</param>
+/// <returns>A single vector of user defined x tic labels.</returns>
+template <typename ...ARGS>
+std::vector<std::string> xtic_labels(ARGS& ...args)
+{
+    std::vector<std::string> xtic_labels;
+
+    (xtic_labels.push_back(args), ...);
+
+    return xtic_labels;
+}
+
+
+
+
+/// <summary>
+/// A function for packing the ytic labels for plotting functions.
+/// </summary>
+/// <typeparam name="...ARGS"></typeparam>
+/// <param name="...args">Input a comma seperated list of strings to match up to the ytics.</param>
+/// <returns>A single vector of user defined y tic labels.</returns>
+template <typename ...ARGS>
+std::vector<std::string> ytic_labels(ARGS& ...args)
+{
+    std::vector<std::string> ytic_labels;
+
+    (ytic_labels.push_back(args), ...);
+
+    return ytic_labels;
 }
 
 

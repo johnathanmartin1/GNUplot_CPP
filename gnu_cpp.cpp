@@ -1,16 +1,17 @@
 #include "GNU_C++.hpp"
 
-
+#include <typeinfo>
 int main() {
-    std::vector<double> data { 1,2,3,4,5,6,7,8,9,10 };
-    std::vector<double> data2 { 10,20,30,40,50,60,70,80,90,100 };
+    std::vector<double> data { 1,2,3,4,5,6,7,8,8.5 };
+    std::vector<double> data2 { 10,20,30,40,50,60,70,80,90,100.5 };
 
     std::vector<double> data3{ 1,2,3,4,5,6,7,8,9,10 };
     std::vector<double> data4{ 2,4,6,8,10,12,14,16,18,20 };
     std::vector<double> data5{ 10,20,30,40,50,60,70,80,90,100 };
-
+    
  
-    plot fig(x_data(data, data2, data), y_data(data3, data4, data5));
+    plot fig(x_data(data), y_data(data));
+    //plot fig(x_data(data, data2, data), y_data(data3, data4, data5));
     fig.data_label = label_data("Data 1", "Data 2", "Data 3");
 
     fig.line_style = line_style(".", "solid");
@@ -36,10 +37,10 @@ int main() {
     //fig.show();
 
     plot fig3;
-    fig3.layer(fig, fig1);
+    fig3.layer(fig);
     fig3.legend = 1;
     //fig3.legend_region = "lmargin";
-  
+    
     fig3.legend_fontsize = 20;
     fig3.legend_title_fontsize = 20;
     fig3.legend_title_font = "DejaVu Sans";
@@ -51,9 +52,14 @@ int main() {
     //fig3.legend_alignment = "center";
     //fig3.legend_position = "0.5, 0.5";
     fig3.legend_position_axis = "90,50";
-    fig3.show();
+   
     std::cout << fig3;
+    //fig3.show();
+   
     //fig3.save("test");
+    fig3.x_range_min = -20;
+    fig3.x_range_max = 10;
+    fig3.show();
     
     //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     //fig3.grid = 1;

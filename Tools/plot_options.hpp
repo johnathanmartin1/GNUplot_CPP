@@ -22,6 +22,14 @@ public:
     // Sets the tics fontsize.
     double axis_tic_fontsize{ 14 };
 
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object
+    std::vector<double> xtic_base{};
+    std::vector<double> ytic_base{};
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the xtic_base.
+    std::vector<std::string> xtic_labels{};
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the ytic_base
+    std::vector<std::string> ytic_labels{};
+
     // Boolian that turns the legened on or off, accepts boolean true or false, or 1 or 0.
     bool legend{ false };
 
@@ -190,6 +198,12 @@ struct two_D_plot_options : public plot_options_general
 
 struct three_D_plot_options : public plot_options_general
 {
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object
+    std::vector<double> ztic_base{};
+
+    //Sets the z tic axis labels using the inputted data when no user defined ones are given 
+    std::vector<std::string> ztic_labels{};
+
     // Sets the z axis label
     std::string z_axis_label{ "z" };
     

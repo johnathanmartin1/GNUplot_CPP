@@ -5,6 +5,8 @@
 #include <string>
 #include <type_traits>
 #include <variant>
+#include <algorithm>
+#include <cmath>
 
 
 
@@ -61,7 +63,150 @@ public:
     }
 
    
+    template <typename T = double, typename U>
+    void tic_builder_2D(const std::string tic_axis, const std::vector<U>& layered_figures, const std::vector<std::vector<T>>& x_data, const std::vector<std::vector<T>>& y_data,
+        std::vector<double>& xtic_base, std::vector<double>& ytic_base, double& x_range_min, double& x_range_max, double& y_range_min, double& y_range_max)
+    {
+        std::vector<double>* tics = nullptr;
+        double* range_min = nullptr;//1e308 max -1e308 min
+        double* range_max = nullptr;
+        const std::vector<std::vector<T>>* data = nullptr;
 
+        if (tic_axis == "x") { data = &x_data; tics = &xtic_base; range_min = &x_range_min; range_max = &x_range_max; }
+        else if (tic_axis == "y") { data = &y_data; tics = &ytic_base; range_min = &y_range_min; range_max = &y_range_max; }
+        //can add in secondry axis onto this list later on
+        tics->clear();
+
+        double max = -std::numeric_limits<double>::infinity();
+        double min = std::numeric_limits<double>::infinity();
+        double scale{};
+
+        if (!data->empty())
+        {
+            for (const std::vector<T>& data_pack : *data)
+            {
+                if (!data_pack.empty())
+                {
+                    auto [minIt, maxIt] = std::minmax_element(data_pack.begin(), data_pack.end());
+
+                    if (*minIt < min) { min = static_cast<double>(*minIt); }
+
+                    if (*maxIt > max) { max = static_cast<double>(*maxIt); }
+                }
+            }
+        }
+
+        if (!layered_figures.empty())
+        {
+            tic_builder_layers(tic_axis, layered_figures, min, max);
+        }
+
+        std::vector<double> tics_min_max_expanded{};
+        if (*range_min == -1e308 and *range_max == 1e308)
+        {
+            tics_min_max_expanded = tics_min_max_expander(min, max);
+
+            min = tics_min_max_expanded[0];
+
+            max = tics_min_max_expanded[1];
+        }
+        else
+        {
+            tics_min_max_expanded = tics_min_max_expander(*range_min, *range_max);
+
+            min = *range_min;
+
+            max = *range_max;
+        }
+
+
+
+        scale = tics_min_max_expanded[2];
+       
+
+        for (double i = min; i <= max; i += scale)
+        {
+            tics->push_back(i);
+            std::cout << i << ",";
+        }
+        std::cout << "\n";
+
+    }
+
+
+    template <typename U>
+    void tic_builder_layers(const std::string& tic_axis, const std::vector<U>& layered_figures, double& min, double& max)
+    {
+        for (const auto& figure : layered_figures)
+        {
+            std::visit([&](const auto& wrapped_fig)
+                {
+                    const auto& fig = wrapped_fig.get();
+
+                    auto inspect = [&](const auto& nested_data)
+                        {
+                            for (const auto& data_pack : nested_data)
+                            {
+                                if (data_pack.empty()) continue;
+
+                                const auto [min_it, max_it] = std::minmax_element(data_pack.begin(), data_pack.end());
+
+                                min = std::min(min, static_cast<double>(*min_it));
+
+                                max = std::max(max, static_cast<double>(*max_it));
+                            }
+
+                        };
+
+                    if (tic_axis == "x") inspect(fig.x_data);
+
+                    else if (tic_axis == "y") inspect(fig.y_data);
+
+
+
+                }, figure);
+        }
+    }
+
+
+    //Expands the tic labels according to the magnitude of the scale of the data so that the range end points will be at 
+    std::vector<double> tics_min_max_expander(double min, double max)
+    {
+
+        double order{};
+
+        double difference = max - min;
+        if (difference == 0.0) {
+            std::cout << "Axis has zero differnce between intial and final range\n\n";
+        }
+        else
+        {
+            order = std::floor(std::log10(std::abs(difference)));
+        }
+
+        double scale = std::pow(10, order);
+
+        if (difference / scale <= 5) { scale = 5 * scale / 10; }
+        else if (difference / scale <= 4) { scale = 4 * scale / 10; }
+        else if (difference / scale <= 3) { scale = 3 * scale / 10; }
+        else if (difference / scale <= 2) { scale = 2 * scale / 10; }
+        else if (difference / scale <= 1) { scale = 1 * scale / 10; }
+
+        double end_range = std::ceil(max / scale) * scale;
+
+        double start_range = std::floor(min / scale) * scale;
+
+        std::vector<double> min_max_range{ start_range, end_range, scale };
+
+        return min_max_range;
+
+    }
+
+
+    std::string tic_label_builder(const double& tic_base, const double& tic_labels)
+    {
+        
+    }
 
 
 };
