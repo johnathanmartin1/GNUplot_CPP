@@ -22,6 +22,12 @@ public:
     // Sets the tics fontsize.
     double axis_tic_fontsize{ 14 };
 
+    //Sets the decimal places of the x tic values
+    int xtic_decimal_places{};
+    
+    //Sets the decimal places of the y tic values.
+    int ytic_decimal_places{};
+
     //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object
     std::vector<double> xtic_base{};
     std::vector<double> ytic_base{};

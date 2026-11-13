@@ -92,14 +92,9 @@ public:
 
     // Displays the plot in an interactive window.
     void show()
+
+
     {
-        plot_data_alignment();
-
-        layer_plot_data_alignment(layered_figs);
-
-        tic_builder_2D("x", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max);
-        tic_builder_2D("y", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max);
-
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -108,6 +103,17 @@ public:
 
             return;
         }
+
+        plot_data_alignment();
+
+        layer_plot_data_alignment(layered_figs);
+
+        tic_builder_2D(gp, "x", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels);
+        
+           
+        tic_builder_2D(gp, "y", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels);
+
+        //tic_label_builder("x", gp, xtic_base, xtic_labels);
 
         gp << "set terminal windows\n";
 

@@ -7,8 +7,10 @@
 #include <variant>
 #include <algorithm>
 #include <cmath>
+#include <fstream>
+#include <iostream>
 
-
+#include "math_tools.hpp"
 
 //___________________________________________________________________________________________________________________________________________________________________________
 
@@ -64,16 +66,19 @@ public:
 
    
     template <typename T = double, typename U>
-    void tic_builder_2D(const std::string tic_axis, const std::vector<U>& layered_figures, const std::vector<std::vector<T>>& x_data, const std::vector<std::vector<T>>& y_data,
-        std::vector<double>& xtic_base, std::vector<double>& ytic_base, double& x_range_min, double& x_range_max, double& y_range_min, double& y_range_max)
+    void tic_builder_2D(std::ofstream& gp, const std::string tic_axis, const std::vector<U>& layered_figures, const std::vector<std::vector<T>>& x_data, const std::vector<std::vector<T>>& y_data,
+        std::vector<double>& xtic_base, std::vector<double>& ytic_base, double& x_range_min, double& x_range_max, double& y_range_min, double& y_range_max, int xtic_decimal_places, int ytic_decimal_places,
+    const std::vector<std::string>& xtic_labels, const std::vector<std::string>& ytic_labels)
     {
         std::vector<double>* tics = nullptr;
         double* range_min = nullptr;//1e308 max -1e308 min
         double* range_max = nullptr;
+        int tic_decimal_places{};
+        std::vector<std::string> tic_labels{};
         const std::vector<std::vector<T>>* data = nullptr;
 
-        if (tic_axis == "x") { data = &x_data; tics = &xtic_base; range_min = &x_range_min; range_max = &x_range_max; }
-        else if (tic_axis == "y") { data = &y_data; tics = &ytic_base; range_min = &y_range_min; range_max = &y_range_max; }
+        if (tic_axis == "x") { data = &x_data; tics = &xtic_base; range_min = &x_range_min; range_max = &x_range_max; tic_decimal_places = xtic_decimal_places; tic_labels = xtic_labels; }
+        else if (tic_axis == "y") { data = &y_data; tics = &ytic_base; range_min = &y_range_min; range_max = &y_range_max; tic_decimal_places = ytic_decimal_places; tic_labels = ytic_labels; }
         //can add in secondry axis onto this list later on
         tics->clear();
 
@@ -119,10 +124,10 @@ public:
             max = *range_max;
         }
 
-
-
         scale = tics_min_max_expanded[2];
-       
+
+
+        
 
         for (double i = min; i <= max; i += scale)
         {
@@ -130,6 +135,8 @@ public:
             std::cout << i << ",";
         }
         std::cout << "\n";
+        //const std::string tic_axis, std::ofstream& gp, const std::vector<double>& tic_base, const std::vector<std::string>& tic_labels, double scale, int tic_decimal_places
+        tic_label_builder(tic_axis, gp, tics, tic_labels, scale, tic_decimal_places);
 
     }
 
@@ -202,12 +209,47 @@ public:
 
     }
 
-
-    std::string tic_label_builder(const double& tic_base, const double& tic_labels)
+    //Produces the gnu plot string for the tic labels
+    void tic_label_builder(const std::string tic_axis, std::ofstream& gp, const std::vector<double>& tic_base,  std::vector<std::string>& tic_labels, double scale, int tic_decimal_places)
     {
+        std::vector<std::string> tic_base_str{};
         
+        
+        if (scale < 1 and tic_decimal_places == 0) { tic_decimal_places = static_cast<int>(std::log10(std::pow(scale, -1))); }
+
+        //for (double tic_num : tic_base) { tic_base_str.push_back(std::to_string(round_to_places(tic_num, tic_decimal_places))); }
+
+        for (double tic_num : tic_base) { tic_base_str.push_back(std::to_string(tic_num)); }
+
+        if (tic_labels.empty()) { tic_labels = tic_base_str; }
+        
+        std::vector<std::string> smallest_list = std::min(tic_base_str, tic_labels);
+
+        gp << "set ";
+        
+        if (tic_axis == "x") { gp << "xtics "; }
+        else if (tic_axis == "y") { gp << "ytics "; }
+        else if (tic_axis == "x2") { gp << "x2tics "; }
+        else if (tic_axis == "y2") { gp << "y2tics "; }
+
+        gp << "(";
+
+        for (std::size_t i = 0; i < smallest_list.size(); i++)
+        {
+            gp << "\"" << tic_labels[i] << "\" " << tic_base[i];
+
+            if (i + 1 == smallest_list.size())
+            {
+                gp << ")\n";
+            }
+            else
+            {
+                gp << ", ";
+            }
+        }
     }
 
+    
 
 };
 
@@ -386,7 +428,7 @@ public:
     }
 
 
-
+    
     
 
 };
