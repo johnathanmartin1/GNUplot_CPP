@@ -15,6 +15,12 @@ public:
    
     // Sets the y axis label, accepts data type string.
     std::string y_axis_label = "y";
+
+    //SEts the x axis label rotation
+    double x_axis_label_rotation{};
+
+    //Sets the yu axis label rotation
+    double y_axis_label_rotation{};
     
     // Sets the axis label font size.
     double axis_label_fontsize{ 14 };
@@ -36,6 +42,11 @@ public:
     //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the ytic_base
     std::vector<std::string> ytic_labels{};
 
+    //Sets the rotation angle of the xtics labels
+    double xtic_rotation{ 0 };
+
+    //Setsv the rotation angle of the ytics labels
+    double ytic_rotation{ 0 };
     // Boolian that turns the legened on or off, accepts boolean true or false, or 1 or 0.
     bool legend{ false };
 
@@ -123,8 +134,22 @@ public:
     {
         out << "std::string x_axis_label = \"" << x_axis_label << "\"\n"
             << "std::string y_axis_label = \"" << y_axis_label << "\"\n"
+            << "double x_axis_label_rotation = " << x_axis_label_rotation << "\n"
+            << "double y_axis_label_rotation = " << y_axis_label_rotation << "\n"
             << "double axis_label_fontsize = " << axis_label_fontsize << "\n"
             << "double axis_tic_fontsize = " << axis_tic_fontsize << "\n"
+            << "int xtic_decimal_places = " << xtic_decimal_places << "\n"
+            << "int ytic_decimal_places = " << ytic_decimal_places << "\n"
+            << "std::vector<double> xtic_base = ";
+            list_finisher(out, xtic_base);
+        out << "std::vector<double> ytic_base = ";
+            list_finisher(out, ytic_base);
+        out << "std::vector<std::string> xtic_labels = ";
+            list_finisher(out, xtic_labels);
+        out << "std::vector<std::string> ytic_labels = ";
+            list_finisher(out, ytic_labels);
+        out << "double xtic_rotation = " << xtic_rotation << "\n"
+            << "double ytic_rotation = " << ytic_rotation << "\n"
             << "bool legend = " << legend << "\n"
             << "std::string legend_font = \"" << legend_font << "\"\n"
             << "double legend_fontsize = " << legend_fontsize << "\n"

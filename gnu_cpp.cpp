@@ -2,7 +2,7 @@
 
 #include <typeinfo>
 int main() {
-    std::vector<double> data { 1,2,3,4,5,6,7,8,8.5 };
+    std::vector<double> data { 1,1.01,1.005,1.007,2,3,4,5,6,7,8,8.5 };
     std::vector<double> data2 { 10,20,30,40,50,60,70,80,90,100.5 };
 
     std::vector<double> data3{ 1,2,3,4,5,6,7,8,9,10 };
@@ -33,7 +33,7 @@ int main() {
     
 
     fig.layer(fig1);
-    std::cout << fig;
+    //std::cout << fig;
     //fig.show();
 
     plot fig3;
@@ -50,16 +50,22 @@ int main() {
     fig3.legend_title = "My Title";
     fig3.legend_invert = "invert";
     //fig3.legend_alignment = "center";
-    //fig3.legend_position = "0.5, 0.5";
-    fig3.legend_position_axis = "90,50";
+    fig3.legend_position = "0.1, 1.0";
+   // fig3.legend_position_axis = "90,50";
    
-    std::cout << fig3;
+    
     //fig3.show();
    
     //fig3.save("test");
-    fig3.x_range_min = -20;
-    fig3.x_range_max = 10;
+    //fig3.x_range_min = -20;
+    fig3.x_range_max = 20;
+    //fig3.xtic_labels = xtic_labels("minus ten", "zero", "something else", "i have no idea", "need more names", "aaaarrrgghh", "is this the last one for testing i dont know");
+    //for (auto i : fig3.xtic_labels) { std::cout << i << "\n"; }
+    fig3.ytic_rotation = 90;
+    fig3.xtic_rotation = 45;
+    fig3.x_axis_label_rotation = 45;
     fig3.show();
+    std::cout << fig3;
     
     //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     //fig3.grid = 1;

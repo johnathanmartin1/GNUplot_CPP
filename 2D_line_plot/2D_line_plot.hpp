@@ -108,10 +108,10 @@ public:
 
         layer_plot_data_alignment(layered_figs);
 
-        tic_builder_2D(gp, "x", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels);
+        tic_builder_2D(gp, "x", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels, xtic_rotation, ytic_rotation);
         
            
-        tic_builder_2D(gp, "y", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels);
+        tic_builder_2D(gp, "y", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels, xtic_rotation, ytic_rotation);
 
         //tic_label_builder("x", gp, xtic_base, xtic_labels);
 
@@ -119,9 +119,9 @@ public:
 
         gp << "set mouse\n";
        
-        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "' rotate by " << x_axis_label_rotation << "right \n";
 
-        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "' rotate by " << y_axis_label_rotation << "right \n";
 
         gp << "set title \"" << title << "\"\n";
 
@@ -179,9 +179,9 @@ public:
 
         gp << "set mouse\n";
 
-        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "' rotate by " << x_axis_label_rotation << "right \n";
 
-        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "' rotate by " << y_axis_label_rotation << "right \n";
 
         gp << "set title \"" << title << "\"\n";
 

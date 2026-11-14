@@ -68,19 +68,21 @@ public:
     template <typename T = double, typename U>
     void tic_builder_2D(std::ofstream& gp, const std::string tic_axis, const std::vector<U>& layered_figures, const std::vector<std::vector<T>>& x_data, const std::vector<std::vector<T>>& y_data,
         std::vector<double>& xtic_base, std::vector<double>& ytic_base, double& x_range_min, double& x_range_max, double& y_range_min, double& y_range_max, int xtic_decimal_places, int ytic_decimal_places,
-    const std::vector<std::string>& xtic_labels, const std::vector<std::string>& ytic_labels)
+    const std::vector<std::string>& xtic_labels, const std::vector<std::string>& ytic_labels,  double xtic_rotation, double ytic_rotation)
     {
-        std::vector<double>* tics = nullptr;
+        std::vector<double> tics{};
         double* range_min = nullptr;//1e308 max -1e308 min
         double* range_max = nullptr;
         int tic_decimal_places{};
         std::vector<std::string> tic_labels{};
         const std::vector<std::vector<T>>* data = nullptr;
+        double rotation{};
 
-        if (tic_axis == "x") { data = &x_data; tics = &xtic_base; range_min = &x_range_min; range_max = &x_range_max; tic_decimal_places = xtic_decimal_places; tic_labels = xtic_labels; }
-        else if (tic_axis == "y") { data = &y_data; tics = &ytic_base; range_min = &y_range_min; range_max = &y_range_max; tic_decimal_places = ytic_decimal_places; tic_labels = ytic_labels; }
+        if (tic_axis == "x") { data = &x_data; range_min = &x_range_min; range_max = &x_range_max; tic_decimal_places = xtic_decimal_places; tic_labels = xtic_labels; rotation = xtic_rotation; }
+        else if (tic_axis == "y") { data = &y_data; range_min = &y_range_min; range_max = &y_range_max; tic_decimal_places = ytic_decimal_places; tic_labels = ytic_labels; rotation = ytic_rotation; }
         //can add in secondry axis onto this list later on
-        tics->clear();
+        
+        //tics.clear();
 
         double max = -std::numeric_limits<double>::infinity();
         double min = std::numeric_limits<double>::infinity();
@@ -115,6 +117,22 @@ public:
 
             max = tics_min_max_expanded[1];
         }
+        else if (*range_min == -1e308)
+        {
+            tics_min_max_expanded = tics_min_max_expander(min, *range_max);
+
+            min = tics_min_max_expanded[0];
+
+            max = tics_min_max_expanded[1];
+        }
+        else if (*range_max == 1e308)
+        {
+            tics_min_max_expanded = tics_min_max_expander(*range_min, max);
+
+            min = tics_min_max_expanded[0];
+
+            max = tics_min_max_expanded[1];
+        }
         else
         {
             tics_min_max_expanded = tics_min_max_expander(*range_min, *range_max);
@@ -126,17 +144,19 @@ public:
 
         scale = tics_min_max_expanded[2];
 
-
+        
         
 
         for (double i = min; i <= max; i += scale)
         {
-            tics->push_back(i);
-            std::cout << i << ",";
+            tics.push_back(i);
         }
-        std::cout << "\n";
-        //const std::string tic_axis, std::ofstream& gp, const std::vector<double>& tic_base, const std::vector<std::string>& tic_labels, double scale, int tic_decimal_places
-        tic_label_builder(tic_axis, gp, tics, tic_labels, scale, tic_decimal_places);
+        
+        
+        tic_label_builder(tic_axis, gp, tics, tic_labels, scale, tic_decimal_places, rotation);
+
+        if (tic_axis == "x") {   xtic_base = tics; x_range_min = *range_min; x_range_max = *range_max; }
+        //else if (tic_axis == "y") { ytic_base = tics; y_range_min = *range_min; y_range_max = *range_max; }
 
     }
 
@@ -194,10 +214,10 @@ public:
         double scale = std::pow(10, order);
 
         if (difference / scale <= 5) { scale = 5 * scale / 10; }
-        else if (difference / scale <= 4) { scale = 4 * scale / 10; }
-        else if (difference / scale <= 3) { scale = 3 * scale / 10; }
-        else if (difference / scale <= 2) { scale = 2 * scale / 10; }
-        else if (difference / scale <= 1) { scale = 1 * scale / 10; }
+        if (difference / scale <= 4) { scale = 4 * scale / 10; }
+        if (difference / scale <= 3) { scale = 3 * scale / 10; }
+        if (difference / scale <= 2) { scale = 2 * scale / 10; }
+        if (difference / scale <= 1) { scale = 1 * scale / 10; }
 
         double end_range = std::ceil(max / scale) * scale;
 
@@ -210,21 +230,10 @@ public:
     }
 
     //Produces the gnu plot string for the tic labels
-    void tic_label_builder(const std::string tic_axis, std::ofstream& gp, const std::vector<double>& tic_base,  std::vector<std::string>& tic_labels, double scale, int tic_decimal_places)
+    void tic_label_builder(const std::string tic_axis, std::ofstream& gp,  std::vector<double>& tic_base, const std::vector<std::string>& tic_labels, double scale, int tic_decimal_places, double rotation)
     {
-        std::vector<std::string> tic_base_str{};
+        if (scale < 1 and tic_decimal_places == 0) { tic_decimal_places = static_cast<int>(std::ceil(std::abs(std::log10(scale)))); }
         
-        
-        if (scale < 1 and tic_decimal_places == 0) { tic_decimal_places = static_cast<int>(std::log10(std::pow(scale, -1))); }
-
-        //for (double tic_num : tic_base) { tic_base_str.push_back(std::to_string(round_to_places(tic_num, tic_decimal_places))); }
-
-        for (double tic_num : tic_base) { tic_base_str.push_back(std::to_string(tic_num)); }
-
-        if (tic_labels.empty()) { tic_labels = tic_base_str; }
-        
-        std::vector<std::string> smallest_list = std::min(tic_base_str, tic_labels);
-
         gp << "set ";
         
         if (tic_axis == "x") { gp << "xtics "; }
@@ -234,13 +243,22 @@ public:
 
         gp << "(";
 
-        for (std::size_t i = 0; i < smallest_list.size(); i++)
+        for (std::size_t i = 0; i < tic_base.size(); i++)
         {
-            gp << "\"" << tic_labels[i] << "\" " << tic_base[i];
-
-            if (i + 1 == smallest_list.size())
+            if (tic_labels.empty())
             {
-                gp << ")\n";
+                gp << "\"" << round_to_places(tic_base[i], tic_decimal_places) << "\" " << tic_base[i];
+            }
+            else
+            {
+                std::string label = (i + 1 > tic_labels.size()) ? "" : tic_labels[i];
+ 
+                gp << "\"" << label << "\" " << tic_base[i];
+            }
+            
+            if (i + 1 == tic_base.size())
+            {
+                gp << ") rotate by "<< rotation << "right\n";
             }
             else
             {
