@@ -15,6 +15,12 @@ public:
    
     // Sets the y axis label, accepts data type string.
     std::string y_axis_label = "y";
+
+    //SEts the x axis label rotation
+    double x_axis_label_rotation{};
+
+    //Sets the yu axis label rotation
+    double y_axis_label_rotation{};
     
     // Sets the axis label font size.
     double axis_label_fontsize{ 14 };
@@ -22,6 +28,25 @@ public:
     // Sets the tics fontsize.
     double axis_tic_fontsize{ 14 };
 
+    //Sets the decimal places of the x tic values
+    int xtic_decimal_places{};
+    
+    //Sets the decimal places of the y tic values.
+    int ytic_decimal_places{};
+
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object
+    std::vector<double> xtic_base{};
+    std::vector<double> ytic_base{};
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the xtic_base.
+    std::vector<std::string> xtic_labels{};
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the ytic_base
+    std::vector<std::string> ytic_labels{};
+
+    //Sets the rotation angle of the xtics labels
+    double xtic_rotation{ 0 };
+
+    //Setsv the rotation angle of the ytics labels
+    double ytic_rotation{ 0 };
     // Boolian that turns the legened on or off, accepts boolean true or false, or 1 or 0.
     bool legend{ false };
 
@@ -109,8 +134,22 @@ public:
     {
         out << "std::string x_axis_label = \"" << x_axis_label << "\"\n"
             << "std::string y_axis_label = \"" << y_axis_label << "\"\n"
+            << "double x_axis_label_rotation = " << x_axis_label_rotation << "\n"
+            << "double y_axis_label_rotation = " << y_axis_label_rotation << "\n"
             << "double axis_label_fontsize = " << axis_label_fontsize << "\n"
             << "double axis_tic_fontsize = " << axis_tic_fontsize << "\n"
+            << "int xtic_decimal_places = " << xtic_decimal_places << "\n"
+            << "int ytic_decimal_places = " << ytic_decimal_places << "\n"
+            << "std::vector<double> xtic_base = ";
+            list_finisher(out, xtic_base);
+        out << "std::vector<double> ytic_base = ";
+            list_finisher(out, ytic_base);
+        out << "std::vector<std::string> xtic_labels = ";
+            list_finisher(out, xtic_labels);
+        out << "std::vector<std::string> ytic_labels = ";
+            list_finisher(out, ytic_labels);
+        out << "double xtic_rotation = " << xtic_rotation << "\n"
+            << "double ytic_rotation = " << ytic_rotation << "\n"
             << "bool legend = " << legend << "\n"
             << "std::string legend_font = \"" << legend_font << "\"\n"
             << "double legend_fontsize = " << legend_fontsize << "\n"
@@ -190,6 +229,18 @@ struct two_D_plot_options : public plot_options_general
 
 struct three_D_plot_options : public plot_options_general
 {
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object
+    std::vector<double> ztic_base{};
+
+    //Sets the decimal places of the z tic values.
+    int ztic_decimal_places{};
+   
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the ytic_base
+    std::vector<std::string> ztic_labels{};
+
+    //Sets the rotation angle of the ztics labels
+    double ztic_rotation{ 0 };
+
     // Sets the z axis label
     std::string z_axis_label{ "z" };
     
@@ -232,7 +283,12 @@ struct three_D_plot_options : public plot_options_general
         out << "std::string z_axis_label = \"" << z_axis_label << "\"\n"
             << "double z_range_min = " << z_range_min << "\n"
             << "double z_range_max = " << z_range_max << "\n"
-            << "double linewidth = " << linewidth << "\n"
+            << "int ztic_decimal_places = " << ztic_decimal_places << "\n"
+            << "std::vector<double> ztic_base = ";
+        list_finisher(out, ztic_base);
+        out << "std::vector<std::string> ztic_labels = ";
+        list_finisher(out, ztic_labels);
+        out << "double linewidth = " << linewidth << "\n"
             << "std::vector<std::string> line_style = ";
         list_finisher(out, line_style);
         out << "std::vector<std::string> line_type = ";
