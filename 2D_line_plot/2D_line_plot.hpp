@@ -28,6 +28,8 @@
 template <typename T = double>
 class plot : public two_D_plot_options, public plot_tools, public plot_builder_2D
 {
+    template <typename T>
+    friend std::ostream& operator << (std::ostream& out, const plot<T>& plt);
 
 public:
     std::vector<std::vector<T>> x_data;
@@ -157,13 +159,6 @@ public:
     /// <param name="name">file location and name to be saved as, i.e "C:/users/documnets/my_plot", take note you must use foward slashes as reverse slash will not work</param>
     void save(std::string name)
     {
-        plot_data_alignment();
-
-        layer_plot_data_alignment(layered_figs);
-
-   /*     tic_builder("x", layered_figs, x_data, y_data, x_data, xtic_labels, ytic_labels, xtic_labels);
-        tic_builder("y", layered_figs, x_data, y_data, x_data, xtic_labels, ytic_labels, xtic_labels);*/
-
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -172,6 +167,14 @@ public:
 
             return;
         }
+        
+        plot_data_alignment();
+
+        layer_plot_data_alignment(layered_figs);
+
+        tic_builder_2D(gp, "x", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels, xtic_rotation, ytic_rotation);
+
+        tic_builder_2D(gp, "y", layered_figs, x_data, y_data, xtic_base, ytic_base, x_range_min, x_range_max, y_range_min, y_range_max, xtic_decimal_places, ytic_decimal_places, xtic_labels, ytic_labels, xtic_rotation, ytic_rotation);
 
         gp << "set terminal pngcairo size 1200, 800\n";
 
@@ -455,6 +458,7 @@ public:
     /// <param name="layered_figs"></param>
     void layer_data_builder(std::ofstream& gp, const std::vector<compatible_figure_classes>& layered_figs)
     {
+       
         if (layered_figs.empty())
         {
             return;

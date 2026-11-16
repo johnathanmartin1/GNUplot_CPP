@@ -232,8 +232,14 @@ struct three_D_plot_options : public plot_options_general
     //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object
     std::vector<double> ztic_base{};
 
-    //Sets the z tic axis labels using the inputted data when no user defined ones are given 
+    //Sets the decimal places of the z tic values.
+    int ztic_decimal_places{};
+   
+    //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the ytic_base
     std::vector<std::string> ztic_labels{};
+
+    //Sets the rotation angle of the ztics labels
+    double ztic_rotation{ 0 };
 
     // Sets the z axis label
     std::string z_axis_label{ "z" };
@@ -277,7 +283,12 @@ struct three_D_plot_options : public plot_options_general
         out << "std::string z_axis_label = \"" << z_axis_label << "\"\n"
             << "double z_range_min = " << z_range_min << "\n"
             << "double z_range_max = " << z_range_max << "\n"
-            << "double linewidth = " << linewidth << "\n"
+            << "int ztic_decimal_places = " << ztic_decimal_places << "\n"
+            << "std::vector<double> ztic_base = ";
+        list_finisher(out, ztic_base);
+        out << "std::vector<std::string> ztic_labels = ";
+        list_finisher(out, ztic_labels);
+        out << "double linewidth = " << linewidth << "\n"
             << "std::vector<std::string> line_style = ";
         list_finisher(out, line_style);
         out << "std::vector<std::string> line_type = ";

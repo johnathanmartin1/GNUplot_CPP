@@ -2,7 +2,7 @@
 
 #include <typeinfo>
 int main() {
-    std::vector<double> data { 1,1.01,1.005,1.007,2,3,4,5,6,7,8,8.5 };
+    std::vector<double> data { 1,2,3,4,5,6,7,8,8.5,9 };
     std::vector<double> data2 { 10,20,30,40,50,60,70,80,90,100.5 };
 
     std::vector<double> data3{ 1,2,3,4,5,6,7,8,9,10 };
@@ -51,7 +51,7 @@ int main() {
     fig3.legend_invert = "invert";
     //fig3.legend_alignment = "center";
     fig3.legend_position = "0.1, 1.0";
-   // fig3.legend_position_axis = "90,50";
+    fig3.legend_position_axis = "90,50";
    
     
     //fig3.show();
@@ -64,10 +64,10 @@ int main() {
     fig3.ytic_rotation = 90;
     fig3.xtic_rotation = 45;
     fig3.x_axis_label_rotation = 45;
-    fig3.show();
+    //fig3.show();
     std::cout << fig3;
     
-    //plot3D fig3(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
+    plot3D fig4(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
     //fig3.grid = 1;
     //fig3.data_label = label_data("data1", "data2");
     //fig3.line_style = line_style(".-", ".");
@@ -81,7 +81,16 @@ int main() {
     //fig3.axis_tic_fontsize = 20;
     //fig3.show();
     ////fig3.save("C:/Users/johna/Desktop/fig3");
-    //std::cout << fig3;
+    fig4.ztic_labels = ztic_labels("a", "b", "c", "d", "e", "f", "g", "h", "i", "j");
+    fig4.ytic_labels = ytic_labels("one", "two", "three");
+    //fig4.xtic_labels = xtic_labels("what", "what2");
+    fig4.ztic_rotation = 180;
+    fig4.ztic_rotation = 45;
+    fig4.axis_tic_fontsize = 14;
+    //fig4.y_range_min = 0;
+    fig4.show();
+    //fig4.save("test");
+    std::cout << fig4;
 
     return 0;
 }

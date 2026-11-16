@@ -133,6 +133,21 @@ std::vector<std::string> ytic_labels(ARGS& ...args)
     return ytic_labels;
 }
 
+/// <summary>
+/// A function for packing the ztic labels for plotting functions.
+/// </summary>
+/// <typeparam name="...ARGS"></typeparam>
+/// <param name="...args">Input a comma seperated list of strings to match up to the ztics.</param>
+/// <returns>A single vector of user defined y tic labels.</returns>
+template <typename ...ARGS>
+std::vector<std::string> ztic_labels(ARGS& ...args)
+{
+    std::vector<std::string> ztic_labels;
+
+    (ztic_labels.push_back(args), ...);
+
+    return ztic_labels;
+}
 
 
 

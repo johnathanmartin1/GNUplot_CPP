@@ -63,12 +63,9 @@ public:
     plot3D& operator = (plot3D&&) = default;
 
 
-    /// <summary>
-    /// Displays the plot in an interactive window.
-    /// </summary>
-    void show()
+    void plot_data_alignment()
     {
-        if (data_size_check_3D(x_data, y_data, z_data)) { return; };
+        data_size_check_3D(x_data, y_data, z_data);
 
         list_sizing_to_data(line_style, x_data, "solid");
 
@@ -80,6 +77,17 @@ public:
 
         list_sizing_to_data(point_type, x_data, 1);
 
+        list_sizing_to_data(line_colour, x_data, "");
+    }
+
+
+
+
+    /// <summary>
+    /// Displays the plot in an interactive window.
+    /// </summary>
+    void show()
+    {
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -88,6 +96,17 @@ public:
 
             return;
         }
+
+        plot_data_alignment();
+
+        tic_builder_3D(gp, "x", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+
+        tic_builder_3D(gp, "y", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+
+        tic_builder_3D(gp, "z", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
 
         gp << "set terminal windows\n";
 
@@ -122,6 +141,8 @@ public:
 
         std::system("gnuplot plot.gp");
 
+        //std::cout << "here";
+
     }
 
     /// <summary>
@@ -130,17 +151,7 @@ public:
     /// <param name="name">file location and name to be saved as, i.e "C:/users/documnets/my_plot", take note you must use foward slashes as reverse slash will not work</param>
     void save(std::string name)
     {
-        if (data_size_check_3D(x_data, y_data, z_data)) { return; };
-
-        list_sizing_to_data(line_style, x_data, "solid");
-
-        list_sizing_to_data(line_type, x_data, "line");
-
-        list_sizing_to_data(point_size, x_data, 1);
-
-        list_sizing_to_data(data_label, x_data, " ");
-
-        list_sizing_to_data(point_type, x_data, 1);
+        plot_data_alignment();
 
         std::ofstream gp("plot.gp");
 
@@ -150,6 +161,15 @@ public:
 
             return;
         }
+
+        tic_builder_3D(gp, "x", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+
+        tic_builder_3D(gp, "y", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+
+        tic_builder_3D(gp, "z", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
 
         gp << "set terminal pngcairo size 1200, 800\n";
 
