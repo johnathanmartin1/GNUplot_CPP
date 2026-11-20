@@ -89,6 +89,8 @@ int main() {
     //fig4.axis_tic_fontsize = 14;
     //fig4.y_range_min = 0;
     fig4.grid = 1;
+    fig4.set_x_axis_label("x axis is cool", 10, 45);
+    fig4.set_xtic("one", "two", "three", "four");
     fig4.save("test");
     fig4.show();
     //fig4.save("test");

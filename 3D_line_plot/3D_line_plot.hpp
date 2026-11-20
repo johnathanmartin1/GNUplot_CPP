@@ -100,23 +100,23 @@ public:
         plot_data_alignment();
 
         tic_builder_3D(gp, "x", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
-            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation, xtic_fontsize, ytic_fontsize, ztic_fontsize);
 
         tic_builder_3D(gp, "y", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
-            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation, xtic_fontsize, ytic_fontsize, ztic_fontsize);
 
         tic_builder_3D(gp, "z", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
-            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation, xtic_fontsize, ytic_fontsize, ztic_fontsize);
 
         gp << "set terminal windows\n";
 
         gp << "set mouse\n";
 
-        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set xlabel '" << x_axis_label << "' font '," << x_axis_label_fontsize << "'\n";
 
-        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << y_axis_label_fontsize << "'\n";
 
-        gp << "set zlabel '" << z_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set zlabel '" << z_axis_label << "' font '," << z_axis_label_fontsize << "'\n";
 
         gp << "set title \"" << title << "\"\n";
 
@@ -163,13 +163,13 @@ public:
         }
 
         tic_builder_3D(gp, "x", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
-            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation, xtic_fontsize, ytic_fontsize, ztic_fontsize);
 
         tic_builder_3D(gp, "y", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
-            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation, xtic_fontsize, ytic_fontsize, ztic_fontsize);
 
         tic_builder_3D(gp, "z", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
-            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
+            xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation, xtic_fontsize, ytic_fontsize, ztic_fontsize);
 
         gp << "set terminal pngcairo size 1500, 1100\n";
 
@@ -177,11 +177,11 @@ public:
 
         gp << "set mouse\n";
 
-        gp << "set xlabel '" << x_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set xlabel '" << x_axis_label << "' font '," << x_axis_label_fontsize << "'\n";
 
-        gp << "set ylabel '" << y_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set ylabel '" << y_axis_label << "' font '," << y_axis_label_fontsize << "'\n";
 
-        gp << "set zlabel '" << z_axis_label << "' font '," << axis_label_fontsize << "'\n";
+        gp << "set zlabel '" << z_axis_label << "' font '," << z_axis_label_fontsize << "'\n";
 
         gp << "set title \"" << title << "\"\n";
 
@@ -226,7 +226,7 @@ protected:
 
         gp << "set wall x0 fillstyle transparent fc rgb '" << background_colour << "'\nset wall y1 fillstyle transparent fc rgb '" << background_colour << "'\nset wall z0 fillstyle transparent fc rgb '" << background_colour << "'\n";
 
-        gp << "set tics font '," << axis_tic_fontsize << "'\n";
+       
         
         gp << "set border " << border << " lw " << border_thickness << "\n";
 
