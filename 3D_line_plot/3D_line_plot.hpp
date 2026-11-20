@@ -234,8 +234,6 @@ protected:
 
         gp << "set wall x0 fillstyle transparent fc rgb '" << background_colour << "'\nset wall y1 fillstyle transparent fc rgb '" << background_colour << "'\nset wall z0 fillstyle transparent fc rgb '" << background_colour << "'\n";
 
-       
-        
         gp << "set border " << border << " lw " << border_thickness << "\n";
 
         if (legend == true)
