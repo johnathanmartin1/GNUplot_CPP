@@ -10,6 +10,7 @@
 #include <variant>
 #include <functional>
 #include <utility>
+#include <filesystem>
 
 #include "Tools/plot_tooling.hpp"
 #include "Tools/plot_options.hpp"
@@ -147,8 +148,9 @@ public:
 
         gp.close();
 
-        std::system("gnuplot plot.gp");
+        std::system("Tools\\gnuplot.exe -persists plot.gp");
 
+        std::filesystem::remove("plot.gp");
     }
 
 
@@ -209,7 +211,9 @@ public:
 
         gp.close();
 
-        std::system("gnuplot plot.gp");
+        std::system("Tools\\gnuplot.exe -persists plot.gp");
+
+        std::filesystem::remove("plot.gp");
     }
 
 

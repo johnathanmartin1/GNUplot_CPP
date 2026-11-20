@@ -7,6 +7,8 @@
 #include <vector>
 #include <string>
 #include <type_traits>
+#include <filesystem>
+
 
 #include "Tools/plot_tooling.hpp"
 #include "Tools/plot_options.hpp"
@@ -88,6 +90,7 @@ public:
     /// </summary>
     void show()
     {
+        
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -139,11 +142,13 @@ public:
 
         gp.close();
 
-        std::system("gnuplot plot.gp");
+        std::system("Tools\\gnuplot.exe -persists plot.gp");   
 
-        //std::cout << "here";
+        std::filesystem::remove("plot.gp");
 
     }
+
+
 
     /// <summary>
     /// Saves the plot as a png file.
@@ -153,6 +158,7 @@ public:
     {
         plot_data_alignment();
 
+        
         std::ofstream gp("plot.gp");
 
         if (!gp)
@@ -204,7 +210,9 @@ public:
 
         gp.close();
 
-        std::system("gnuplot plot.gp");
+        std::system("Tools\\gnuplot.exe -persists plot.gp");
+
+        std::filesystem::remove("plot.gp");
     }
 
 
