@@ -129,7 +129,8 @@ public:
 
         if (grid == true)
         {
-            gp << "set grid\n";
+            gridlines2D(gp, xtic_base, ytic_base);
+            //gp << "set grid\n";
         }
 
         gp << "set xrange " << range_min_max(x_range_min, x_range_max) << "\n";
@@ -190,7 +191,8 @@ public:
 
         if (grid == true)
         {
-            gp << "set grid\n";
+            gridlines2D(gp, xtic_base, ytic_base);
+            //gp << "set grid\n";
         }
 
         gp << "set xrange " << range_min_max(x_range_min, x_range_max) << "\n";

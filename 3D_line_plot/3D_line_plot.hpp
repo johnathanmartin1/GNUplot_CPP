@@ -122,7 +122,7 @@ public:
 
         if (grid == true)
         {
-            gp << "set grid\n";
+            gridlines3D(gp, xtic_base, ytic_base, ztic_base, "interactive");
         }
 
         gp << "set xrange " << range_min_max(x_range_min, x_range_max) << "\n";
@@ -171,7 +171,7 @@ public:
         tic_builder_3D(gp, "z", x_data, y_data, z_data, xtic_base, ytic_base, ztic_base, x_range_min, x_range_max, y_range_min, y_range_max, z_range_min, z_range_max,
             xtic_decimal_places, ytic_decimal_places, ztic_decimal_places, xtic_labels, ytic_labels, ztic_labels, xtic_rotation, ytic_rotation, ztic_rotation);
 
-        gp << "set terminal pngcairo size 1200, 800\n";
+        gp << "set terminal pngcairo size 1500, 1100\n";
 
         gp << "set output '" << name << ".png'\n";
 
@@ -187,7 +187,7 @@ public:
 
         if (grid == true)
         {
-            gp << "set grid xtics ytics ztics\n";
+            gridlines3D(gp, xtic_base, ytic_base, ztic_base, "png");
         }
 
         gp << "set xrange " << range_min_max(x_range_min, x_range_max) << "\n";
