@@ -68,18 +68,19 @@ public:
     template <typename T = double, typename U>
     void tic_builder_2D(std::ofstream& gp, const std::string tic_axis, const std::vector<U>& layered_figures, const std::vector<std::vector<T>>& x_data, const std::vector<std::vector<T>>& y_data,
         std::vector<double>& xtic_base, std::vector<double>& ytic_base, double& x_range_min, double& x_range_max, double& y_range_min, double& y_range_max, int xtic_decimal_places, int ytic_decimal_places,
-    const std::vector<std::string>& xtic_labels, const std::vector<std::string>& ytic_labels,  double xtic_rotation, double ytic_rotation)
+    const std::vector<std::string>& xtic_labels, const std::vector<std::string>& ytic_labels,  double xtic_rotation, double ytic_rotation, double xtic_fontsize, double ytic_fontsize)
     {
         std::vector<double> tics{};
-        double* range_min = nullptr;//1e308 max -1e308 min
-        double* range_max = nullptr;
+        double range_min{}; //1e308 max -1e308 min
+        double range_max{}; 
         int tic_decimal_places{};
         std::vector<std::string> tic_labels{};
         const std::vector<std::vector<T>>* data = nullptr;
         double rotation{};
+        double fontsize{};
 
-        if (tic_axis == "x") { data = &x_data; range_min = &x_range_min; range_max = &x_range_max; tic_decimal_places = xtic_decimal_places; tic_labels = xtic_labels; rotation = xtic_rotation; }
-        else if (tic_axis == "y") { data = &y_data; range_min = &y_range_min; range_max = &y_range_max; tic_decimal_places = ytic_decimal_places; tic_labels = ytic_labels; rotation = ytic_rotation; }
+        if (tic_axis == "x") { data = &x_data; range_min = x_range_min; range_max = x_range_max; tic_decimal_places = xtic_decimal_places; tic_labels = xtic_labels; rotation = xtic_rotation; fontsize = xtic_fontsize; }
+        else if (tic_axis == "y") { data = &y_data; range_min = y_range_min; range_max = y_range_max; tic_decimal_places = ytic_decimal_places; tic_labels = ytic_labels; rotation = ytic_rotation; fontsize = ytic_fontsize; }
         //can add in secondry axis onto this list later on
         
         //tics.clear();
@@ -109,7 +110,7 @@ public:
         }
 
         std::vector<double> tics_min_max_expanded{};
-        if (*range_min == -1e308 and *range_max == 1e308)
+        if (range_min == -1e308 and range_max == 1e308)
         {
             tics_min_max_expanded = tics_min_max_expander(min, max);
 
@@ -117,17 +118,17 @@ public:
 
             max = tics_min_max_expanded[1];
         }
-        else if (*range_min == -1e308)
+        else if (range_min == -1e308)
         {
-            tics_min_max_expanded = tics_min_max_expander(min, *range_max);
+            tics_min_max_expanded = tics_min_max_expander(min, range_max);
 
             min = tics_min_max_expanded[0];
 
             max = tics_min_max_expanded[1];
         }
-        else if (*range_max == 1e308)
+        else if (range_max == 1e308)
         {
-            tics_min_max_expanded = tics_min_max_expander(*range_min, max);
+            tics_min_max_expanded = tics_min_max_expander(range_min, max);
 
             min = tics_min_max_expanded[0];
 
@@ -135,11 +136,11 @@ public:
         }
         else
         {
-            tics_min_max_expanded = tics_min_max_expander(*range_min, *range_max);
+            tics_min_max_expanded = tics_min_max_expander(range_min, range_max);
 
-            min = *range_min;
+            min = range_min;
 
-            max = *range_max;
+            max = range_max;
         }
 
         scale = tics_min_max_expanded[2];
@@ -153,12 +154,14 @@ public:
         }
         
         
-        tic_label_builder(tic_axis, gp, tics, tic_labels, scale, tic_decimal_places, rotation);
+        tic_label_builder(tic_axis, gp, tics, tic_labels, scale, tic_decimal_places, rotation, fontsize);
 
-        if (tic_axis == "x") {   xtic_base = tics; x_range_min = *range_min; x_range_max = *range_max; }
-        else if (tic_axis == "y") { ytic_base = tics; y_range_min = *range_min; y_range_max = *range_max; }
+        if (tic_axis == "x") {   xtic_base = tics; x_range_min = min; x_range_max = max; }
+        else if (tic_axis == "y") { ytic_base = tics; y_range_min = min; y_range_max = max; }
 
     }
+
+
 
 
     template <typename U>
@@ -230,7 +233,7 @@ public:
     }
 
     //Produces the gnu plot string for the tic labels
-    void tic_label_builder(const std::string tic_axis, std::ofstream& gp,  std::vector<double>& tic_base, const std::vector<std::string>& tic_labels, double scale, int tic_decimal_places, double rotation)
+    void tic_label_builder(const std::string tic_axis, std::ofstream& gp,  std::vector<double>& tic_base, const std::vector<std::string>& tic_labels, double scale, int tic_decimal_places, double rotation, double fontsize)
     {
         if (scale < 1 and tic_decimal_places == 0) { tic_decimal_places = static_cast<int>(std::ceil(std::abs(std::log10(scale)))); }
         
@@ -258,7 +261,7 @@ public:
             
             if (i + 1 == tic_base.size())
             {
-                gp << ") rotate by "<< rotation << "right\n";
+                gp << ") rotate by "<< rotation << "right font '," << fontsize << "'\n";
             }
             else
             {
@@ -267,7 +270,20 @@ public:
         }
     }
 
-    
+
+    //Plots gridlines on a 2d plot.
+    void gridlines2D(std::ofstream& gp, const std::vector<double>& xtic_base, const std::vector<double>& ytic_base)
+    {
+        gp << "set style line 99 dt 2 lc rgb \"gray\" lw 1\n";
+        for (size_t i = 1; i < xtic_base.size() - 1; i++)
+        {
+            gp << "set arrow from " << xtic_base[i] << "," << ytic_base[0] << " to " << xtic_base[i] << "," << ytic_base.back() << "  nohead ls 99\n";
+        }
+        for (size_t i = 1; i < ytic_base.size() - 1; i++)
+        {
+            gp << "set arrow from " << xtic_base[0] << "," << ytic_base[i] << " to " << xtic_base.back() << "," << ytic_base[i] << "  nohead ls 99\n";
+        }
+    }
 
 };
 
@@ -372,19 +388,22 @@ protected:
     void tic_builder_3D(std::ofstream& gp, const std::string tic_axis, const std::vector<std::vector<T>>& x_data, const std::vector<std::vector<T>>& y_data, const std::vector<std::vector<T>>& z_data,
         std::vector<double>& xtic_base, std::vector<double>& ytic_base, std::vector<double>& ztic_base, double& x_range_min, double& x_range_max, double& y_range_min, double& y_range_max, double& z_range_min, double& z_range_max,
         int xtic_decimal_places, int ytic_decimal_places, int ztic_decimal_places,
-        const std::vector<std::string>& xtic_labels, const std::vector<std::string>& ytic_labels,const std::vector<std::string>& ztic_labels, double xtic_rotation, double ytic_rotation, double ztic_rotation)
+        const std::vector<std::string>& xtic_labels, const std::vector<std::string>& ytic_labels,const std::vector<std::string>& ztic_labels, double xtic_rotation, double ytic_rotation, double ztic_rotation,
+        double xtic_fontsize, double ytic_fontsize, double ztic_fontsize)
     {
         std::vector<double> tics{};
-        double* range_min = nullptr;//1e308 max -1e308 min
-        double* range_max = nullptr;
+        double range_min{};//1e308 max -1e308 min
+        double range_max{};
         int tic_decimal_places{};
         std::vector<std::string> tic_labels{};
         const std::vector<std::vector<T>>* data = nullptr;
+        std::vector<double> tic_base{};
         double rotation{};
+        double fontsize{};
 
-        if (tic_axis == "x") { data = &x_data; range_min = &x_range_min; range_max = &x_range_max; tic_decimal_places = xtic_decimal_places; tic_labels = xtic_labels; rotation = xtic_rotation; }
-        else if (tic_axis == "y") { data = &y_data; range_min = &y_range_min; range_max = &y_range_max; tic_decimal_places = ytic_decimal_places; tic_labels = ytic_labels; rotation = ytic_rotation; }
-        else if (tic_axis == "z") { data = &z_data; range_min = &z_range_min; range_max = &z_range_max; tic_decimal_places = ztic_decimal_places; tic_labels = ztic_labels; rotation = ztic_rotation; }
+        if (tic_axis == "x") { data = &x_data; tic_base = xtic_base; range_min = x_range_min; range_max = x_range_max; tic_decimal_places = xtic_decimal_places; tic_labels = xtic_labels; rotation = xtic_rotation; fontsize = xtic_fontsize; }
+        else if (tic_axis == "y") { data = &y_data; tic_base = ytic_base; range_min = y_range_min; range_max = y_range_max; tic_decimal_places = ytic_decimal_places; tic_labels = ytic_labels; rotation = ytic_rotation; fontsize = ytic_fontsize; }
+        else if (tic_axis == "z") { data = &z_data; tic_base = ztic_base; range_min = z_range_min; range_max = z_range_max; tic_decimal_places = ztic_decimal_places; tic_labels = ztic_labels; rotation = ztic_rotation; fontsize = ztic_fontsize; }
         
 
         double max = -std::numeric_limits<double>::infinity();
@@ -409,7 +428,7 @@ protected:
     
 
         std::vector<double> tics_min_max_expanded{};
-        if (*range_min == -1e308 and *range_max == 1e308)
+        if (range_min == -1e308 and range_max == 1e308)
         {
             tics_min_max_expanded = tics_min_max_expander(min, max);
 
@@ -417,17 +436,17 @@ protected:
 
             max = tics_min_max_expanded[1];
         }
-        else if (*range_min == -1e308)
+        else if (range_min == -1e308)
         {
-            tics_min_max_expanded = tics_min_max_expander(min, *range_max);
+            tics_min_max_expanded = tics_min_max_expander(min, range_max);
 
             min = tics_min_max_expanded[0];
 
             max = tics_min_max_expanded[1];
         }
-        else if (*range_max == 1e308)
+        else if (range_max == 1e308)
         {
-            tics_min_max_expanded = tics_min_max_expander(*range_min, max);
+            tics_min_max_expanded = tics_min_max_expander(range_min, max);
 
             min = tics_min_max_expanded[0];
 
@@ -435,29 +454,31 @@ protected:
         }
         else
         {
-            tics_min_max_expanded = tics_min_max_expander(*range_min, *range_max);
+            tics_min_max_expanded = tics_min_max_expander(range_min, range_max);
 
-            min = *range_min;
+            min = range_min;
 
-            max = *range_max;
+            max = range_max;
         }
 
         scale = tics_min_max_expanded[2];
 
 
-
-
-        for (double i = min; i <= max; i += scale)
+        if (tic_base.empty())
         {
-            tics.push_back(i);
+            for (double i = min; i <= max; i += scale)
+            {
+                tics.push_back(i);
+            }
         }
+        else { tics = tic_base; }
 
 
-        tic_label_builder(tic_axis, gp, tics, tic_labels, scale, tic_decimal_places, rotation);
+        tic_label_builder(tic_axis, gp, tics, tic_labels, scale, tic_decimal_places, rotation, fontsize);
 
-        if (tic_axis == "x") { xtic_base = tics; x_range_min = *range_min; x_range_max = *range_max; }
-        else if (tic_axis == "y") { ytic_base = tics; y_range_min = *range_min; y_range_max = *range_max; }
-        else if (tic_axis == "z") { ztic_base = tics; z_range_min = *range_min; z_range_max = *range_max; }
+        if (tic_axis == "x") { xtic_base = tics; x_range_min = min; x_range_max = max; }
+        else if (tic_axis == "y") { ytic_base = tics; y_range_min = min; y_range_max = max; }
+        else if (tic_axis == "z") { ztic_base = tics; z_range_min = min; z_range_max = max; }
 
     }
 
@@ -498,7 +519,7 @@ protected:
     }
 
     //Produces the gnu plot string for the tic labels
-    void tic_label_builder(const std::string tic_axis, std::ofstream& gp, std::vector<double>& tic_base, const std::vector<std::string>& tic_labels, double scale, int tic_decimal_places, double rotation)
+    void tic_label_builder(const std::string tic_axis, std::ofstream& gp, std::vector<double>& tic_base, const std::vector<std::string>& tic_labels, double scale, int tic_decimal_places, double rotation, double fontsize)
     {
         if (scale < 1 and tic_decimal_places == 0) { tic_decimal_places = static_cast<int>(std::ceil(std::abs(std::log10(scale)))); }
 
@@ -526,7 +547,7 @@ protected:
 
             if (i + 1 == tic_base.size())
             {
-                gp << ") rotate by " << rotation << " right\n";
+                gp << ") rotate by " << rotation << " right font '," << fontsize << "'\n";
             }
             else
             {
@@ -534,6 +555,45 @@ protected:
             }
         }
     }
+
+
+    //Plots gridlines on a 3d plot.
+    void gridlines3D(std::ofstream& gp, const std::vector<double>& xtic_base, const std::vector<double>& ytic_base, const std::vector<double>& ztic_base, std::string plot_type)
+    {
+        int set_off{ 1 };
+        if (plot_type == "png") { set_off = 1; }
+        gp << "set style line 99 dt 2 lc rgb \"gray\" lw 1\n";
+        //xy plane
+        for (size_t i = 1; i < xtic_base.size() - set_off; i++)
+        {
+            gp << "set arrow from " << xtic_base[i] << "," << ytic_base[0] << "," << ztic_base[0] << " to " << xtic_base[i] << "," << ytic_base.back() << "," << ztic_base[0] << " nohead ls 99\n";
+        }
+        for (size_t i = 1; i < ytic_base.size() - set_off; i++)
+        {
+            gp << "set arrow from " << xtic_base[0] << "," << ytic_base[i] << "," << ztic_base[0] << " to " << xtic_base.back() << "," << ytic_base[i] << "," << ztic_base[0] << "  nohead ls 99\n";
+        }
+
+        //xz plane
+        for (size_t i = 1; i < xtic_base.size() - set_off ; i++)
+        {
+            gp << "set arrow from " << xtic_base[i] << "," << ytic_base.back() << "," << ztic_base[0] << " to " << xtic_base[i] << "," << ytic_base.back() << "," << ztic_base.back() << " nohead ls 99 front\n";
+        }
+        for (size_t i = 1; i < ztic_base.size() - set_off; i++)
+        {
+            gp << "set arrow from " << xtic_base[0] << "," << ytic_base.back() << "," << ztic_base[i] << " to " << xtic_base.back() << "," << ytic_base.back() << "," << ztic_base[i] << "  nohead ls 99 front\n";
+        }
+
+        //yz plane
+        for (size_t i = 1; i < ytic_base.size() - set_off; i++)
+        {
+            gp << "set arrow from " << xtic_base[0] << "," << ytic_base[i] << "," << ztic_base[0] << " to " << xtic_base[0] << "," << ytic_base[i] << "," << ztic_base.back() << " nohead ls 99 \n";
+        }
+        for (size_t i = 1; i < ztic_base.size() - set_off; i++)
+        {
+            gp << "set arrow from " << xtic_base[0] << "," << ytic_base[0] << "," << ztic_base[i] << " to " << xtic_base[0] << "," << ytic_base.back() << "," << ztic_base[i] << "  nohead ls 99\n";
+        }
+    }
+
 };
 
 

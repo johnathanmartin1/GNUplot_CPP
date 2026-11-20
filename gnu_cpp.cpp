@@ -55,16 +55,16 @@ int main() {
    
     
     //fig3.show();
-   
+    fig3.grid = true;
     //fig3.save("test");
     //fig3.x_range_min = -20;
-    fig3.x_range_max = 20;
+    //fig3.x_range_max = 20;
     //fig3.xtic_labels = xtic_labels("minus ten", "zero", "something else", "i have no idea", "need more names", "aaaarrrgghh", "is this the last one for testing i dont know");
     //for (auto i : fig3.xtic_labels) { std::cout << i << "\n"; }
     fig3.ytic_rotation = 90;
     fig3.xtic_rotation = 45;
     fig3.x_axis_label_rotation = 45;
-    //fig3.show();
+    fig3.show();
     std::cout << fig3;
     
     plot3D fig4(x_data(data, data2), y_data(data4,data), z_data(data5,data5));
@@ -81,13 +81,17 @@ int main() {
     //fig3.axis_tic_fontsize = 20;
     //fig3.show();
     ////fig3.save("C:/Users/johna/Desktop/fig3");
-    fig4.ztic_labels = ztic_labels("a", "b", "c", "d", "e", "f", "g", "h", "i", "j");
-    fig4.ytic_labels = ytic_labels("one", "two", "three");
+    //fig4.ztic_labels = ztic_labels("a", "b", "c", "d", "e", "f", "g", "h", "i", "j");
+    //fig4.ytic_labels = ytic_labels("one", "two", "three");
     //fig4.xtic_labels = xtic_labels("what", "what2");
-    fig4.ztic_rotation = 180;
-    fig4.ztic_rotation = 45;
-    fig4.axis_tic_fontsize = 14;
+    //fig4.ztic_rotation = 180;
+    //fig4.ztic_rotation = 45;
+    //fig4.axis_tic_fontsize = 14;
     //fig4.y_range_min = 0;
+    fig4.grid = 1;
+    fig4.set_x_axis_label("x axis is cool", 10, 45);
+    fig4.set_xtic("one", "two", "three", "four");
+    fig4.save("test");
     fig4.show();
     //fig4.save("test");
     std::cout << fig4;

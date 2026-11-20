@@ -23,10 +23,16 @@ public:
     double y_axis_label_rotation{};
     
     // Sets the axis label font size.
-    double axis_label_fontsize{ 14 };
+    double x_axis_label_fontsize{ 14 };
+
+    // Sets the axis label font size.
+    double y_axis_label_fontsize{ 14 };
 
     // Sets the tics fontsize.
-    double axis_tic_fontsize{ 14 };
+    double xtic_fontsize{ 14 };
+
+    //Sets the ytics fontsize
+    double ytic_fontsize{ 14 };
 
     //Sets the decimal places of the x tic values
     int xtic_decimal_places{};
@@ -136,8 +142,10 @@ public:
             << "std::string y_axis_label = \"" << y_axis_label << "\"\n"
             << "double x_axis_label_rotation = " << x_axis_label_rotation << "\n"
             << "double y_axis_label_rotation = " << y_axis_label_rotation << "\n"
-            << "double axis_label_fontsize = " << axis_label_fontsize << "\n"
-            << "double axis_tic_fontsize = " << axis_tic_fontsize << "\n"
+            << "double axis_label_fontsize = " << x_axis_label_fontsize << "\n"
+            << "double axis_label_fontsize = " << y_axis_label_fontsize << "\n"
+            << "double xtic_fontsize = " << xtic_fontsize << "\n"
+            << "double ytic_fontsize = " << ytic_fontsize << "\n"
             << "int xtic_decimal_places = " << xtic_decimal_places << "\n"
             << "int ytic_decimal_places = " << ytic_decimal_places << "\n"
             << "std::vector<double> xtic_base = ";
@@ -176,6 +184,75 @@ public:
             << "double border_thickness = " << border_thickness << "\n"
             << "std::string background_colour = \"" << background_colour << "\"\n";
     }
+
+
+    //Option setting functions
+    
+    /// <summary>
+    /// Sets the parameters for the x axis label: label string, fontsize and rotation
+    /// </summary>
+    /// <param name="std::string y_axis_label"></param>
+    /// <param name="double fontsize"></param>
+    /// <param name="doublerotation"></param>
+    void set_x_axis_label(std::string x_axis_label_string, double fontsize=14, double rotation=0)
+    {
+        if (x_axis_label_string != "") { x_axis_label = x_axis_label_string; x_axis_label_fontsize = fontsize; x_axis_label_rotation = rotation; }
+    }
+
+    /// <summary>
+    /// Sets the parameters for the y axis label: label string, fontsize and rotation
+    /// </summary>
+    /// <param name="std::string y_axis_label"></param>
+    /// <param name="double fontsize"></param>
+    /// <param name="doublerotation"></param>
+    void set_y_axis_label(std::string y_axis_label_string, double fontsize=14, double rotation=0)
+    {
+        if (y_axis_label_string != "") { y_axis_label = y_axis_label_string; y_axis_label_fontsize = fontsize; y_axis_label_rotation = rotation; }
+    }
+
+   /// <summary>
+   /// Sets the x tic labels, with fontsizer and rotation. Overload function ignores the fontsize and rotation variables
+   /// </summary>
+   /// <typeparam name="...XTIC_LABELS"></typeparam>
+   /// <param name="fontsize"></param>
+   /// <param name="rotation"></param>
+   /// <param name="...xtic_label"></param>
+    template <typename ...XTIC_LABELS>
+    void set_xtic(double fontsize, double rotation, XTIC_LABELS... xtic_label)
+    {
+        (xtic_labels.push_back(xtic_label), ...);
+        xtic_fontsize = fontsize;
+        xtic_rotation = rotation;
+    }
+
+    template <typename ...XTIC_LABELS>
+    void set_xtic(XTIC_LABELS... xtic_label)
+    {
+        (xtic_labels.push_back(xtic_label), ...);
+    }
+
+    /// <summary>
+    /// Sets the y tic labels, with fontsizer and rotation. Overload function ignores the fontsize and rotation variables
+    /// </summary>
+    /// <typeparam name="...YTIC_LABELS"></typeparam>
+    /// <param name="fontsize"></param>
+    /// <param name="rotation"></param>
+    /// <param name="...ytic_label"></param>
+    template <typename ...YTIC_LABELS>
+    void set_ytic(double fontsize, double rotation, YTIC_LABELS... ytic_label)
+    {
+        (ytic_labels.push_back(ytic_label), ...);
+        xtic_fontsize = fontsize;
+        xtic_rotation = rotation;
+    }
+
+    template <typename ...YTIC_LABELS>
+    void set_ytic(YTIC_LABELS... ytic_label)
+    {
+        (ytic_labels.push_back(ytic_label), ...);
+    }
+
+
 };
 
 
@@ -238,11 +315,17 @@ struct three_D_plot_options : public plot_options_general
     //Sets the tics axis labels when no user defined labels exist will build the tic labels in the object. If empty will default to the ytic_base
     std::vector<std::string> ztic_labels{};
 
+    //Sets teh z tic fontsize
+    double ztic_fontsize{ 14 };
+
     //Sets the rotation angle of the ztics labels
     double ztic_rotation{ 0 };
 
     // Sets the z axis label
     std::string z_axis_label{ "z" };
+
+    //Sets teh z axis label fontsize
+    double z_axis_label_fontsize{ 14 };
     
     // Sets the minimum range of the plot on the z axis.
     double z_range_min{ -1e308 };
@@ -281,8 +364,10 @@ struct three_D_plot_options : public plot_options_general
     void options_print(std::ostream& out) const
     {
         out << "std::string z_axis_label = \"" << z_axis_label << "\"\n"
+            << "double z_axis_label_fontsize = " << z_axis_label_fontsize << "\n"
             << "double z_range_min = " << z_range_min << "\n"
             << "double z_range_max = " << z_range_max << "\n"
+            << "double ztic_fontsize = " << ztic_fontsize << "\n"
             << "int ztic_decimal_places = " << ztic_decimal_places << "\n"
             << "std::vector<double> ztic_base = ";
         list_finisher(out, ztic_base);
@@ -300,6 +385,40 @@ struct three_D_plot_options : public plot_options_general
         out << "std::vector<std::string>> point_type = ";
         list_finisher(out, point_type);
         out << "int border = " << border << "\n";
+    }
+
+
+    /// <summary>
+    /// Sets the parameters for the y axis label: label string, fontsize and rotation
+    /// </summary>
+    /// <param name="std::string y_axis_label"></param>
+    /// <param name="double fontsize"></param>
+    /// <param name="doublerotation"></param>
+    void set_y_axis_label(std::string y_axis_label_string, double fontsize = 14, double rotation = 0)
+    {
+        if (y_axis_label_string != "") { y_axis_label = y_axis_label_string; y_axis_label_fontsize = fontsize; y_axis_label_rotation = rotation; }
+    }
+
+
+    /// <summary>
+    /// Sets the z tic labels, with fontsizer and rotation. Overload function ignores the fontsize and rotation variables
+    /// </summary>
+    /// <typeparam name="...ZTIC_LABELS"></typeparam>
+    /// <param name="fontsize"></param>
+    /// <param name="rotation"></param>
+    /// <param name="...ztic_label"></param>
+    template <typename ...ZTIC_LABELS>
+    void set_ztic(double fontsize, double rotation, ZTIC_LABELS... ztic_label)
+    {
+        (ztic_labels.push_back(ztic_label), ...);
+        ztic_fontsize = fontsize;
+        ztic_rotation = rotation;
+    }
+
+    template <typename ...ZTIC_LABELS>
+    void set_ztic(ZTIC_LABELS... ztic_label)
+    {
+        (ztic_labels.push_back(ztic_label), ...);
     }
 
     
